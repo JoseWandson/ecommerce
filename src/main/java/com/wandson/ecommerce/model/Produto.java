@@ -1,7 +1,8 @@
 package com.wandson.ecommerce.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
