@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 class OperacoesComTransacaoTest extends EntityManagerTest {
 
     @Test
-    void inserirOPrimeiroObjeto(){
+    void inserirOPrimeiroObjeto() {
         Produto produto = new Produto();
         produto.setId(2);
         produto.setNome("Câmera Canon");
@@ -25,5 +25,17 @@ class OperacoesComTransacaoTest extends EntityManagerTest {
 
         Produto produtoVerificado = entityManager.find(Produto.class, produto.getId());
         Assertions.assertNotNull(produtoVerificado);
+    }
+
+    @Test
+    void removerObjeto() {
+        Produto produto = entityManager.find(Produto.class, 3);
+
+        entityManager.getTransaction().begin();
+        entityManager.remove(produto);
+        entityManager.getTransaction().commit();
+
+        Produto produtoVerificacao = entityManager.find(Produto.class, 3);
+        Assertions.assertNull(produtoVerificacao);
     }
 }
