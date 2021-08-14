@@ -57,4 +57,18 @@ class OperacoesComTransacaoTest extends EntityManagerTest {
         Assertions.assertNotNull(produtoVerificado);
         Assertions.assertEquals("Kindle Paperwhite", produtoVerificado.getNome());
     }
+
+    @Test
+    void atualizarObjetoGerenciado() {
+        Produto produto = entityManager.find(Produto.class, 1);
+
+        entityManager.getTransaction().begin();
+        produto.setNome("Kindle Paperwhite 2ª Geração");
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificado = entityManager.find(Produto.class, produto.getId());
+        Assertions.assertEquals("Kindle Paperwhite 2ª Geração", produtoVerificado.getNome());
+    }
 }
