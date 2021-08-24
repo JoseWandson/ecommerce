@@ -124,4 +124,19 @@ class OperacoesComTransacaoTest extends EntityManagerTest {
         Produto produtoVerificacaoMerge = entityManager.find(Produto.class, produtoMerge.getId());
         Assertions.assertNotNull(produtoVerificacaoMerge);
     }
+
+    @Test
+    void impedirOperacaoComBancoDeDados() {
+        Produto produto = entityManager.find(Produto.class, 1);
+        entityManager.detach(produto);
+
+        entityManager.getTransaction().begin();
+        produto.setNome("Kindle Paperwhite 2ª Geração");
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Produto produtoVerificado = entityManager.find(Produto.class, produto.getId());
+        Assertions.assertEquals("Kindle", produtoVerificado.getNome());
+    }
 }
