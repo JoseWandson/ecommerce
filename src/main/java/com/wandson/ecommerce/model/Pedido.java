@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -36,4 +37,7 @@ public class Pedido {
 
     @Enumerated(EnumType.STRING)
     private StatusPedido status;
+
+    @Embedded
+    private EnderecoEntregaPedido enderecoEntrega;
 }
