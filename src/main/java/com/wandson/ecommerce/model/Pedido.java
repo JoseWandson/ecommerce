@@ -30,8 +30,8 @@ public class Pedido {
     @Column(name = "data_conclusao")
     private LocalDateTime dataConclusao;
 
-    @Column(name = "nota_fiscal_id")
-    private Integer notaFiscalId;
+    @OneToOne(mappedBy = "pedido")
+    private NotaFiscal notaFiscal;
     private BigDecimal total;
 
     @Enumerated(EnumType.STRING)
@@ -39,6 +39,9 @@ public class Pedido {
 
     @Embedded
     private EnderecoEntregaPedido enderecoEntrega;
+
+    @OneToOne(mappedBy = "pedido")
+    private PagamentoCartao pagamento;
 
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens;
