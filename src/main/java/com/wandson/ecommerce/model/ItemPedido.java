@@ -25,10 +25,10 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Pedido pedido;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Produto produto;
 
     @Column(name = "preco_produto")

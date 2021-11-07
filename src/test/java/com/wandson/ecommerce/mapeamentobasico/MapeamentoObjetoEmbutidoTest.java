@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.mapeamentobasico;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.EnderecoEntregaPedido;
 import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.StatusPedido;
@@ -14,6 +15,8 @@ class MapeamentoObjetoEmbutidoTest extends EntityManagerTest {
 
     @Test
     void analisarMapeamentoObjetoEmbutido() {
+        Cliente cliente = entityManager.find(Cliente.class, 1);
+
         EnderecoEntregaPedido endereco = new EnderecoEntregaPedido();
         endereco.setCep("00000-00");
         endereco.setLogradouro("Rua das Laranjeiras");
@@ -27,6 +30,7 @@ class MapeamentoObjetoEmbutidoTest extends EntityManagerTest {
         pedido.setStatus(StatusPedido.AGUARDANDO);
         pedido.setTotal(new BigDecimal(1000));
         pedido.setEnderecoEntrega(endereco);
+        pedido.setCliente(cliente);
 
         entityManager.getTransaction().begin();
         entityManager.persist(pedido);
