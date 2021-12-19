@@ -1,20 +1,25 @@
 package com.wandson.ecommerce.model;
 
+import com.wandson.ecommerce.listener.GenericoListener;
+import com.wandson.ecommerce.listener.GerarNotaFiscalListener;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Log
 @Entity
 @Getter
 @Setter
 @Table(name = "pedido")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EntityListeners({GerarNotaFiscalListener.class, GenericoListener.class})
 public class Pedido {
 
     @Id
@@ -51,6 +56,10 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens;
 
+    public boolean isPago() {
+        return StatusPedido.PAGO.equals(status);
+    }
+
     @PrePersist
     private void aoPersistir() {
         dataCriacao = LocalDateTime.now();
@@ -61,6 +70,31 @@ public class Pedido {
     private void aoAtualizar() {
         dataUltimaAtualizacao = LocalDateTime.now();
         calcularTotal();
+    }
+
+    @PostPersist
+    private void aposPersistir() {
+        log.info("Após persistir Pedido.");
+    }
+
+    @PostUpdate
+    private void aposAtualizar() {
+        log.info("Após atualizar Pedido.");
+    }
+
+    @PreRemove
+    private void aoRemover() {
+        log.info("Antes de remover Pedido.");
+    }
+
+    @PostRemove
+    private void aposRemover() {
+        log.info("Após remover Pedido.");
+    }
+
+    @PostLoad
+    private void aoCarregar() {
+        log.info("Após carregar o Pedido.");
     }
 
     private void calcularTotal() {

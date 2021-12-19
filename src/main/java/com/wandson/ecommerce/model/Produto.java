@@ -1,6 +1,8 @@
 package com.wandson.ecommerce.model;
 
+import com.wandson.ecommerce.listener.GenericoListener;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,6 +22,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "produto")
+@EntityListeners({GenericoListener.class})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Produto {
 
