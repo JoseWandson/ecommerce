@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.model;
 
 import com.wandson.ecommerce.listener.GenericoListener;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -33,6 +35,12 @@ public class Produto {
     private String nome;
     private String descricao;
     private BigDecimal preco;
+
+    @Column(name = "data_criacao", updatable = false)
+    private LocalDateTime dataCriacao;
+
+    @Column(name = "data_ultima_atualizacao", insertable = false)
+    private LocalDateTime dataUltimaAtualizacao;
 
     @OneToOne(mappedBy = "produto")
     private Estoque estoque;
