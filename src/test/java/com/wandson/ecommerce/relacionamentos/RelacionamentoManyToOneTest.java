@@ -3,6 +3,7 @@ package com.wandson.ecommerce.relacionamentos;
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.ItemPedido;
+import com.wandson.ecommerce.model.ItemPedidoId;
 import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.Produto;
 import com.wandson.ecommerce.model.StatusPedido;
@@ -34,6 +35,8 @@ class RelacionamentoManyToOneTest extends EntityManagerTest {
 
     @Test
     void verificarRelacionamentoItemPedido() {
+        entityManager.getTransaction().begin();
+
         Cliente cliente = entityManager.find(Cliente.class, 1);
         Produto produto = entityManager.find(Produto.class, 1);
 
@@ -42,20 +45,22 @@ class RelacionamentoManyToOneTest extends EntityManagerTest {
         pedido.setTotal(BigDecimal.TEN);
         pedido.setCliente(cliente);
 
+        entityManager.persist(pedido);
+        entityManager.flush();
+
         ItemPedido itemPedido = new ItemPedido();
         itemPedido.setPrecoProduto(produto.getPreco());
         itemPedido.setQuantidade(1);
         itemPedido.setPedido(pedido);
         itemPedido.setProduto(produto);
+        itemPedido.setPedidoId(pedido.getId());
+        itemPedido.setProdutoId(produto.getId());
 
-        entityManager.getTransaction().begin();
-        entityManager.persist(pedido);
         entityManager.persist(itemPedido);
         entityManager.getTransaction().commit();
-
         entityManager.clear();
 
-        ItemPedido itemPedidoVerificacao = entityManager.find(ItemPedido.class, itemPedido.getId());
+        ItemPedido itemPedidoVerificacao = entityManager.find(ItemPedido.class, new ItemPedidoId(itemPedido.getPedidoId(), itemPedido.getProdutoId()));
         Assertions.assertNotNull(itemPedidoVerificacao.getPedido());
         Assertions.assertNotNull(itemPedidoVerificacao.getProduto());
     }
