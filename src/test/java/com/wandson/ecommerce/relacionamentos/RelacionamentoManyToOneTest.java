@@ -53,14 +53,13 @@ class RelacionamentoManyToOneTest extends EntityManagerTest {
         itemPedido.setQuantidade(1);
         itemPedido.setPedido(pedido);
         itemPedido.setProduto(produto);
-        itemPedido.setPedidoId(pedido.getId());
-        itemPedido.setProdutoId(produto.getId());
+        itemPedido.setId(new ItemPedidoId(pedido.getId(), produto.getId()));
 
         entityManager.persist(itemPedido);
         entityManager.getTransaction().commit();
         entityManager.clear();
 
-        ItemPedido itemPedidoVerificacao = entityManager.find(ItemPedido.class, new ItemPedidoId(itemPedido.getPedidoId(), itemPedido.getProdutoId()));
+        ItemPedido itemPedidoVerificacao = entityManager.find(ItemPedido.class, new ItemPedidoId(pedido.getId(), produto.getId()));
         Assertions.assertNotNull(itemPedidoVerificacao.getPedido());
         Assertions.assertNotNull(itemPedidoVerificacao.getProduto());
     }
