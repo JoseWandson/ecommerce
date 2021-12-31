@@ -3,6 +3,7 @@ package com.wandson.ecommerce.relacionamentos;
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.ItemPedido;
+import com.wandson.ecommerce.model.ItemPedidoId;
 import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.Produto;
 import com.wandson.ecommerce.model.StatusPedido;
@@ -43,6 +44,7 @@ class RelacionamentoOneToManyTest extends EntityManagerTest {
         pedido.setCliente(cliente);
 
         ItemPedido itemPedido = new ItemPedido();
+        itemPedido.setId(new ItemPedidoId());
         itemPedido.setPrecoProduto(produto.getPreco());
         itemPedido.setQuantidade(1);
         itemPedido.setPedido(pedido);

@@ -4,6 +4,7 @@ import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.ItemPedido;
 import com.wandson.ecommerce.model.ItemPedidoId;
+import com.wandson.ecommerce.model.NotaFiscal;
 import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.Produto;
 import com.wandson.ecommerce.model.StatusPedido;
@@ -11,13 +12,32 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
-class ChaveCompostaTest extends EntityManagerTest {
+class MapsIdTest extends EntityManagerTest {
 
     @Test
-    void salvarItem() {
-        entityManager.getTransaction().begin();
+    void inserirPagamento() {
+        Pedido pedido = entityManager.find(Pedido.class, 1);
 
+        NotaFiscal notaFiscal = new NotaFiscal();
+        notaFiscal.setPedido(pedido);
+        notaFiscal.setDataEmissao(new Date());
+        notaFiscal.setXml("<xml/>");
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(notaFiscal);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        NotaFiscal notaFiscalVarificacao = entityManager.find(NotaFiscal.class, notaFiscal.getId());
+        Assertions.assertNotNull(notaFiscalVarificacao);
+        Assertions.assertEquals(pedido.getId(), notaFiscalVarificacao.getId());
+    }
+
+    @Test
+    void inserirItemPedido() {
         Cliente cliente = entityManager.find(Cliente.class, 1);
         Produto produto = entityManager.find(Produto.class, 1);
 
@@ -27,10 +47,6 @@ class ChaveCompostaTest extends EntityManagerTest {
         pedido.setStatus(StatusPedido.AGUARDANDO);
         pedido.setTotal(produto.getPreco());
 
-        entityManager.persist(pedido);
-
-        entityManager.flush();
-
         ItemPedido itemPedido = new ItemPedido();
         itemPedido.setId(new ItemPedidoId());
         itemPedido.setPedido(pedido);
@@ -38,22 +54,15 @@ class ChaveCompostaTest extends EntityManagerTest {
         itemPedido.setPrecoProduto(produto.getPreco());
         itemPedido.setQuantidade(1);
 
+        entityManager.getTransaction().begin();
+        entityManager.persist(pedido);
         entityManager.persist(itemPedido);
-
         entityManager.getTransaction().commit();
 
         entityManager.clear();
 
-        Pedido pedidoVerificacao = entityManager.find(Pedido.class, pedido.getId());
-        Assertions.assertNotNull(pedidoVerificacao);
-        Assertions.assertFalse(pedidoVerificacao.getItens().isEmpty());
-    }
-
-    @Test
-    void bucarItem() {
-        ItemPedido itemPedido = entityManager.find(
-                ItemPedido.class, new ItemPedidoId(1, 1));
-
-        Assertions.assertNotNull(itemPedido);
+        ItemPedido itemPedidoVerificacao = entityManager.find(
+                ItemPedido.class, new ItemPedidoId(pedido.getId(), produto.getId()));
+        Assertions.assertNotNull(itemPedidoVerificacao);
     }
 }
