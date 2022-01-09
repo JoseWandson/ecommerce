@@ -1,7 +1,9 @@
 package com.wandson.ecommerce.model;
 
 import com.wandson.ecommerce.listener.GenericoListener;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -48,4 +50,9 @@ public class Produto {
     @ManyToMany
     @JoinTable(name = "produto_categoria", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
     private List<Categoria> categorias;
+
+    @ElementCollection
+    @Column(name = "tag")
+    @CollectionTable(name = "produto_tag", joinColumns = @JoinColumn(name = "produto_id"))
+    private List<String> tags;
 }
