@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -29,7 +30,9 @@ public class NotaFiscal {
     @OneToOne(optional = false)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
-    private String xml;
+
+    @Lob
+    private byte[] xml;
 
     @Column(name = "data_emissao")
     private Date dataEmissao;
