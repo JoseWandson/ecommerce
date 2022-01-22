@@ -2,8 +2,14 @@ package com.wandson.ecommerce.mapeamentoavancado;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
+import com.wandson.ecommerce.model.Pagamento;
+import com.wandson.ecommerce.model.PagamentoCartao;
+import com.wandson.ecommerce.model.Pedido;
+import com.wandson.ecommerce.model.StatusPagamento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class HerancaTest extends EntityManagerTest {
 
@@ -20,5 +26,33 @@ class HerancaTest extends EntityManagerTest {
 
         Cliente clienteVerificacao = entityManager.find(Cliente.class, cliente.getId());
         Assertions.assertNotNull(clienteVerificacao.getId());
+    }
+
+    @Test
+    void buscarPagamentos() {
+        List<Pagamento> pagamentos = entityManager
+                .createQuery("select p from Pagamento p", Pagamento.class)
+                .getResultList();
+
+        Assertions.assertFalse(pagamentos.isEmpty());
+    }
+
+    @Test
+    void incluirPagamentoPedido() {
+        Pedido pedido = entityManager.find(Pedido.class, 1);
+
+        PagamentoCartao pagamentoCartao = new PagamentoCartao();
+        pagamentoCartao.setPedido(pedido);
+        pagamentoCartao.setStatus(StatusPagamento.PROCESSANDO);
+        pagamentoCartao.setNumeroCartao("123");
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(pagamentoCartao);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Pedido pedidoVerificacao = entityManager.find(Pedido.class, pedido.getId());
+        Assertions.assertNotNull(pedidoVerificacao.getPagamento());
     }
 }
