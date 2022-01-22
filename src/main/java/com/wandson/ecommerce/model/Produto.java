@@ -6,9 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
@@ -28,13 +25,9 @@ import java.util.List;
 @Setter
 @Table(name = "produto")
 @EntityListeners({GenericoListener.class})
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Produto {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class Produto extends EntidadeBaseInteger {
 
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     private String nome;
     private String descricao;
     private BigDecimal preco;

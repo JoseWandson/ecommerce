@@ -4,9 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,13 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "pagamento_boleto")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PagamentoBoleto {
-
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class PagamentoBoleto extends EntidadeBaseInteger {
 
     @Column(name = "pedido_id")
     private Integer pedidoId;

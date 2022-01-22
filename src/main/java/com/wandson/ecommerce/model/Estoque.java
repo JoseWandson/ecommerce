@@ -1,9 +1,6 @@
 package com.wandson.ecommerce.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -15,13 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "estoque")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Estoque {
-
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class Estoque extends EntidadeBaseInteger {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "produto_id")

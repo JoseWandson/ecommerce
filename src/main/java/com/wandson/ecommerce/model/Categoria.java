@@ -1,9 +1,6 @@
 package com.wandson.ecommerce.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -19,13 +16,9 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "categoria")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Categoria {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class Categoria extends EntidadeBaseInteger {
 
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     private String nome;
 
     @ManyToOne
