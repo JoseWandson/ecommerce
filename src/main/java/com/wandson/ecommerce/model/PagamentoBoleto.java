@@ -1,8 +1,8 @@
 package com.wandson.ecommerce.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "pagamento_boleto")
+@DiscriminatorValue("boleto")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class PagamentoBoleto extends Pagamento {
 
