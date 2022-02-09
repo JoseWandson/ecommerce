@@ -1,12 +1,10 @@
 package com.wandson.ecommerce.model;
 
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
@@ -18,10 +16,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Inheritance
 @Table(name = "pagamento")
-@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "tipo_pagamento")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@DiscriminatorColumn(name = "tipo_pagamento", discriminatorType = DiscriminatorType.STRING)
 public abstract class Pagamento extends EntidadeBaseInteger {
 
     @MapsId
