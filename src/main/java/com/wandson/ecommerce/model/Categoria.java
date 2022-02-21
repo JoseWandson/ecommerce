@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +16,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "categoria")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@Table(name = "categoria", uniqueConstraints = @UniqueConstraint(name = "unq_nome", columnNames = "nome"))
 public class Categoria extends EntidadeBaseInteger {
 
     private String nome;
