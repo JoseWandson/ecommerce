@@ -30,8 +30,13 @@ import java.util.List;
 @Table(name = "produto", uniqueConstraints = @UniqueConstraint(name = "unq_nome", columnNames = "nome"), indexes = @Index(name = "idx_nome", columnList = "nome"))
 public class Produto extends EntidadeBaseInteger {
 
+    @Column(length = 100, nullable = false)
     private String nome;
+
+    @Column(columnDefinition = "varchar(275) not null default 'descricao'")
     private String descricao;
+
+    @Column(precision = 10, scale = 2)
     private BigDecimal preco;
 
     @Column(name = "data_criacao", updatable = false)

@@ -37,9 +37,12 @@ public class Pedido extends EntidadeBaseInteger {
 
     @OneToOne(mappedBy = "pedido")
     private NotaFiscal notaFiscal;
+
+    @Column(precision = 19, scale = 2, nullable = false)
     private BigDecimal total;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 30, nullable = false)
     private StatusPedido status;
 
     @Embedded
