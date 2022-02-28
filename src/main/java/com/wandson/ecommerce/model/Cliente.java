@@ -33,7 +33,10 @@ import java.util.Objects;
 @Table(name = "cliente", uniqueConstraints = @UniqueConstraint(name = "unq_cpf", columnNames = "cpf"), indexes = @Index(name = "idx_nome", columnList = "nome"))
 public class Cliente extends EntidadeBaseInteger {
 
+    @Column(length = 100, nullable = false)
     private String nome;
+
+    @Column(length = 14, nullable = false)
     private String cpf;
 
     @Transient
@@ -43,7 +46,7 @@ public class Cliente extends EntidadeBaseInteger {
     private LocalDate dataNascimento;
 
     @Enumerated(EnumType.STRING)
-    @Column(table = "cliente_detalhe")
+    @Column(table = "cliente_detalhe", length = 30, nullable = false)
     private SexoCliente sexo;
 
     @OneToMany(mappedBy = "cliente")

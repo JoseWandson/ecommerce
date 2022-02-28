@@ -2,7 +2,6 @@ package com.wandson.ecommerce.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.MapsId;
@@ -18,13 +17,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "nota_fiscal")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class NotaFiscal {
-
-    @Id
-    @EqualsAndHashCode.Include
-    @Column(name = "pedido_id")
-    private Integer id;
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class NotaFiscal extends EntidadeBaseInteger {
 
     @MapsId
     @OneToOne(optional = false)
@@ -32,8 +26,9 @@ public class NotaFiscal {
     private Pedido pedido;
 
     @Lob
+    @Column(nullable = false)
     private byte[] xml;
 
-    @Column(name = "data_emissao")
+    @Column(name = "data_emissao", nullable = false)
     private Date dataEmissao;
 }
