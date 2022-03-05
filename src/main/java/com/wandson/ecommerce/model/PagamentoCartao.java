@@ -14,6 +14,6 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class PagamentoCartao extends Pagamento {
 
-    @Column(name = "numero_cartao", length = 50, nullable = false)
+    @Column(name = "numero_cartao", length = 50)
     private String numeroCartao;
 }

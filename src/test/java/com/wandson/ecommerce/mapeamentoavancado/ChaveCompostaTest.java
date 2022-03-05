@@ -10,8 +10,6 @@ import com.wandson.ecommerce.model.StatusPedido;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 class ChaveCompostaTest extends EntityManagerTest {
 
     @Test
@@ -23,7 +21,6 @@ class ChaveCompostaTest extends EntityManagerTest {
 
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
-        pedido.setDataCriacao(LocalDateTime.now());
         pedido.setStatus(StatusPedido.AGUARDANDO);
         pedido.setTotal(produto.getPreco());
 

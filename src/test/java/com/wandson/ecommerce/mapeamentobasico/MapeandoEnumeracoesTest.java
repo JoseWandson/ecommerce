@@ -13,6 +13,7 @@ class MapeandoEnumeracoesTest extends EntityManagerTest {
         Cliente cliente = new Cliente();
         cliente.setNome("José Mineiro");
         cliente.setSexo(SexoCliente.MASCULINO);
+        cliente.setCpf("777");
 
         entityManager.getTransaction().begin();
         entityManager.persist(cliente);

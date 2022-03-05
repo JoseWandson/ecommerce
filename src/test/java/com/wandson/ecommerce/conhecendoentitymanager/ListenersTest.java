@@ -8,6 +8,8 @@ import com.wandson.ecommerce.model.StatusPedido;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 class ListenersTest extends EntityManagerTest {
 
     @Test
@@ -17,6 +19,7 @@ class ListenersTest extends EntityManagerTest {
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
         pedido.setStatus(StatusPedido.AGUARDANDO);
+        pedido.setTotal(BigDecimal.TEN);
 
         entityManager.getTransaction().begin();
 
