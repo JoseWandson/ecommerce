@@ -2,6 +2,7 @@ package com.wandson.ecommerce.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -25,7 +26,8 @@ public class Categoria extends EntidadeBaseInteger {
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_pai_id")
+    @JoinColumn(name = "categoria_pai_id",
+            foreignKey = @ForeignKey(name = "fk_categoria_categoriapai"))
     private Categoria categoriaPai;
 
     @OneToMany(mappedBy = "categoriaPai")

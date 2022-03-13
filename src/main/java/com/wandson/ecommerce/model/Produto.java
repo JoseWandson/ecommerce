@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -51,15 +52,23 @@ public class Produto extends EntidadeBaseInteger {
     private Estoque estoque;
 
     @ManyToMany
-    @JoinTable(name = "produto_categoria", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+    @JoinTable(name = "produto_categoria",
+            joinColumns = @JoinColumn(name = "produto_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "fk_produto_categoria_produto")),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "fk_produto_categoria_categoria")))
     private List<Categoria> categorias;
 
     @ElementCollection
     @Column(name = "tag", length = 50, nullable = false)
-    @CollectionTable(name = "produto_tag", joinColumns = @JoinColumn(name = "produto_id"))
+    @CollectionTable(name = "produto_tag",
+            joinColumns = @JoinColumn(name = "produto_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "fk_produto_tag_produto")))
     private List<String> tags;
 
     @ElementCollection
-    @CollectionTable(name = "produto_atributo", joinColumns = @JoinColumn(name = "produto_id"))
+    @CollectionTable(name = "produto_atributo",
+            joinColumns = @JoinColumn(name = "produto_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "fk_produto_atributo_produto")))
     private List<Atributo> atributos;
 }
