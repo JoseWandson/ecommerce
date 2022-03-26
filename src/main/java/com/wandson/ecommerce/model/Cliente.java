@@ -30,7 +30,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@SecondaryTable(name = "cliente_detalhe", pkJoinColumns = @PrimaryKeyJoinColumn(name = "cliente_id"))
+@SecondaryTable(name = "cliente_detalhe", pkJoinColumns = @PrimaryKeyJoinColumn(name = "cliente_id"), foreignKey = @ForeignKey(name = "fk_cliente_detalhe_cliente"))
 @Table(name = "cliente", uniqueConstraints = @UniqueConstraint(name = "unq_cpf", columnNames = "cpf"), indexes = @Index(name = "idx_nome", columnList = "nome"))
 public class Cliente extends EntidadeBaseInteger {
 
