@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.operacoesemcascata;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.model.Categoria;
 import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.ItemPedido;
 import com.wandson.ecommerce.model.ItemPedidoId;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 class CascadeTypePersistTest extends EntityManagerTest {
@@ -98,5 +100,29 @@ class CascadeTypePersistTest extends EntityManagerTest {
 
         Cliente clienteVerificacao = entityManager.find(Cliente.class, cliente.getId());
         Assertions.assertNotNull(clienteVerificacao);
+    }
+
+    @Test
+    @Disabled("Precisa do CascadeType.PERSIST para o teste funcionar.")
+    void persistirProdutoComCategoria() {
+        Produto produto = new Produto();
+        produto.setDataCriacao(LocalDateTime.now());
+        produto.setPreco(BigDecimal.TEN);
+        produto.setNome("Fones de Ouvido");
+        produto.setDescricao("A melhor qualidade de som");
+
+        Categoria categoria = new Categoria();
+        categoria.setNome("Áudio");
+
+        produto.setCategorias(List.of(categoria)); // CascadeType.PERSIST
+
+        entityManager.getTransaction().begin();
+        entityManager.persist(produto);
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Categoria categoriaVerificacao = entityManager.find(Categoria.class, categoria.getId());
+        Assertions.assertNotNull(categoriaVerificacao);
     }
 }
