@@ -57,4 +57,21 @@ class CascadeTypeRemoveTest extends EntityManagerTest {
         Produto produtoVerificacao = entityManager.find(Produto.class, produto.getId());
         Assertions.assertTrue(produtoVerificacao.getCategorias().isEmpty());
     }
+
+    @Test
+    @Disabled("Precisa do orphanRemoval = true e CascadeType.PERSIST para o teste funcionar.")
+    void removerItensOrfaos() {
+        Pedido pedido = entityManager.find(Pedido.class, 1);
+
+        Assertions.assertFalse(pedido.getItens().isEmpty());
+
+        entityManager.getTransaction().begin();
+        pedido.getItens().clear();
+        entityManager.getTransaction().commit();
+
+        entityManager.clear();
+
+        Pedido pedidoVerificacao = entityManager.find(Pedido.class, pedido.getId());
+        Assertions.assertTrue(pedidoVerificacao.getItens().isEmpty());
+    }
 }
