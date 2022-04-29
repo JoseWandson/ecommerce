@@ -49,4 +49,16 @@ class BasicoJPQLTest extends EntityManagerTest {
         List<Cliente> listaClientes = typedQueryCliente.getResultList();
         Assertions.assertEquals(Cliente.class, listaClientes.get(0).getClass());
     }
+
+    @Test
+    void projetarOResultado() {
+        String jpql = "select id, nome from Produto";
+
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
+        List<Object[]> lista = typedQuery.getResultList();
+
+        Assertions.assertEquals(2, lista.get(0).length);
+
+        lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+    }
 }
