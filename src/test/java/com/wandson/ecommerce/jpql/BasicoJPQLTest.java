@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.jpql;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.dto.ProdutoDTO;
 import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.Pedido;
 import jakarta.persistence.Query;
@@ -60,5 +61,16 @@ class BasicoJPQLTest extends EntityManagerTest {
         Assertions.assertEquals(2, lista.get(0).length);
 
         lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+    }
+
+    @Test
+    void projetarNoDTO() {
+        String jpql = "select new com.wandson.ecommerce.dto.ProdutoDTO(id, nome) from Produto";
+
+        TypedQuery<ProdutoDTO> typedQuery = entityManager.createQuery(jpql, ProdutoDTO.class);
+        List<ProdutoDTO> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println(p.getId() + ", " + p.getNome()));
     }
 }
