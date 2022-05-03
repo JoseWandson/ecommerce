@@ -1,6 +1,8 @@
 package com.wandson.ecommerce.iniciandocomjpa;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.model.ItemPedido;
+import com.wandson.ecommerce.model.ItemPedidoId;
 import com.wandson.ecommerce.model.Produto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -31,8 +33,10 @@ class OperacoesComTransacaoTest extends EntityManagerTest {
     @Test
     void removerObjeto() {
         Produto produto = entityManager.find(Produto.class, 3);
+        ItemPedido itemPedido = entityManager.find(ItemPedido.class, new ItemPedidoId(1, 3));
 
         entityManager.getTransaction().begin();
+        entityManager.remove(itemPedido);
         entityManager.remove(produto);
         entityManager.getTransaction().commit();
 
