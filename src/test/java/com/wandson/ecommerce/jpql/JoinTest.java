@@ -17,6 +17,16 @@ class JoinTest extends EntityManagerTest {
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
 
         List<Pedido> lista = typedQuery.getResultList();
-        Assertions.assertEquals(1, lista.size());
+        Assertions.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    void fazerLeftJoin() {
+        String jpql = "select p from Pedido p left join p.pagamento pag on pag.status = 'PROCESSANDO'";
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
     }
 }
