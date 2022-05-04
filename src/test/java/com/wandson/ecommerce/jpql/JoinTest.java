@@ -29,4 +29,18 @@ class JoinTest extends EntityManagerTest {
         List<Pedido> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
     }
+
+    @Test
+    void usarJoinFetch() {
+        var jpql = """
+                select p from Pedido p
+                    left join fetch p.pagamento
+                    join fetch p.cliente
+                    left join fetch p.notaFiscal""";
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
 }
