@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -31,5 +31,5 @@ public class NotaFiscal extends EntidadeBaseInteger {
     private byte[] xml;
 
     @Column(name = "data_emissao", nullable = false)
-    private Date dataEmissao;
+    private LocalDateTime dataEmissao;
 }

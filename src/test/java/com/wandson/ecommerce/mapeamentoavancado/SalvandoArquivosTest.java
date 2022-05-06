@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 class SalvandoArquivosTest extends EntityManagerTest {
@@ -19,7 +19,7 @@ class SalvandoArquivosTest extends EntityManagerTest {
 
         NotaFiscal notaFiscal = new NotaFiscal();
         notaFiscal.setPedido(pedido);
-        notaFiscal.setDataEmissao(new Date());
+        notaFiscal.setDataEmissao(LocalDateTime.now());
         notaFiscal.setXml(carregarNotaFiscal());
 
         entityManager.getTransaction().begin();

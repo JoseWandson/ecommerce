@@ -11,7 +11,7 @@ import com.wandson.ecommerce.model.StatusPedido;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 class MapsIdTest extends EntityManagerTest {
 
@@ -21,7 +21,7 @@ class MapsIdTest extends EntityManagerTest {
 
         NotaFiscal notaFiscal = new NotaFiscal();
         notaFiscal.setPedido(pedido);
-        notaFiscal.setDataEmissao(new Date());
+        notaFiscal.setDataEmissao(LocalDateTime.now());
         notaFiscal.setXml("<xml/>".getBytes());
 
         entityManager.getTransaction().begin();

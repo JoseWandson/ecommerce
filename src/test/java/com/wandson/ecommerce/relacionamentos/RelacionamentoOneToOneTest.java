@@ -8,7 +8,7 @@ import com.wandson.ecommerce.model.StatusPagamento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 class RelacionamentoOneToOneTest extends EntityManagerTest {
 
@@ -37,7 +37,7 @@ class RelacionamentoOneToOneTest extends EntityManagerTest {
 
         NotaFiscal notaFiscal = new NotaFiscal();
         notaFiscal.setXml("TESTE".getBytes());
-        notaFiscal.setDataEmissao(new Date());
+        notaFiscal.setDataEmissao(LocalDateTime.now());
         notaFiscal.setPedido(pedido);
 
         entityManager.getTransaction().begin();
