@@ -2,6 +2,7 @@ package com.wandson.ecommerce.jpql;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
+import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,27 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
         typedQuery.setParameter("nome", "a");
 
         List<Cliente> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    @SuppressWarnings("JpaQlInspection")
+    void usarIsNull() {
+        String jpql = "select p from Produto p where p.foto is null";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    void usarIsEmpty() {
+        String jpql = "select p from Produto p where p.categorias is empty";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
     }
 }
