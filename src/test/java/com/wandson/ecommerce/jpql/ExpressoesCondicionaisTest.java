@@ -2,12 +2,14 @@ package com.wandson.ecommerce.jpql;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
+import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 class ExpressoesCondicionaisTest extends EntityManagerTest {
@@ -53,6 +55,17 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
         typedQuery.setParameter("precoFinal", new BigDecimal(1500));
 
         List<Produto> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    void usarMaiorMenorComDatas() {
+        String jpql = "select p from Pedido p where p.dataCriacao > :data";
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+        typedQuery.setParameter("data", LocalDateTime.now().minusDays(2));
+
+        List<Pedido> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
     }
 }
