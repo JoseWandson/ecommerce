@@ -5,6 +5,8 @@ import com.wandson.ecommerce.model.Pedido;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 class RemovendoEntidadesReferenciadasTest extends EntityManagerTest {
 
     @Test
@@ -15,6 +17,9 @@ class RemovendoEntidadesReferenciadasTest extends EntityManagerTest {
 
         entityManager.getTransaction().begin();
         pedido.getItens().forEach(entityManager::remove);
+        if (Objects.nonNull(pedido.getPagamento())) {
+            entityManager.remove(pedido.getPagamento());
+        }
         entityManager.remove(pedido);
         entityManager.getTransaction().commit();
 

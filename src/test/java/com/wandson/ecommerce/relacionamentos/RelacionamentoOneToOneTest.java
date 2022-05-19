@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 class RelacionamentoOneToOneTest extends EntityManagerTest {
 
@@ -16,12 +17,15 @@ class RelacionamentoOneToOneTest extends EntityManagerTest {
     void verificarRelacionamento() {
         Pedido pedido = entityManager.find(Pedido.class, 1);
 
-        PagamentoCartao pagamentoCartao = new PagamentoCartao();
+        var pagamentoCartao = new PagamentoCartao();
         pagamentoCartao.setNumeroCartao("1234");
         pagamentoCartao.setStatus(StatusPagamento.PROCESSANDO);
         pagamentoCartao.setPedido(pedido);
 
         entityManager.getTransaction().begin();
+        if (Objects.nonNull(pedido.getPagamento())) {
+            entityManager.remove(pedido.getPagamento());
+        }
         entityManager.persist(pagamentoCartao);
         entityManager.getTransaction().commit();
 
@@ -35,7 +39,7 @@ class RelacionamentoOneToOneTest extends EntityManagerTest {
     void verificarRelacionamentoPedidoNotaFiscal() {
         Pedido pedido = entityManager.find(Pedido.class, 1);
 
-        NotaFiscal notaFiscal = new NotaFiscal();
+        var notaFiscal = new NotaFiscal();
         notaFiscal.setXml("TESTE".getBytes());
         notaFiscal.setDataEmissao(LocalDateTime.now());
         notaFiscal.setPedido(pedido);

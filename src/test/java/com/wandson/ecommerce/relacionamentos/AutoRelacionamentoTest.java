@@ -9,10 +9,10 @@ class AutoRelacionamentoTest extends EntityManagerTest {
 
     @Test
     void verificarRelacionamento() {
-        Categoria categoriaPai = new Categoria();
-        categoriaPai.setNome("Futebol");
+        var categoriaPai = new Categoria();
+        categoriaPai.setNome("Basquete");
 
-        Categoria categoria = new Categoria();
+        var categoria = new Categoria();
         categoria.setNome("Uniformes");
         categoria.setCategoriaPai(categoriaPai);
 
@@ -29,6 +29,5 @@ class AutoRelacionamentoTest extends EntityManagerTest {
         Categoria categoriaPaiVerificacao = entityManager.find(Categoria.class, categoriaPai.getId());
         Assertions.assertFalse(categoriaPaiVerificacao.getCategorias().isEmpty());
     }
-
 
 }

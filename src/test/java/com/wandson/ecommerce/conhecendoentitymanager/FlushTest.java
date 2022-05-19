@@ -2,6 +2,7 @@ package com.wandson.ecommerce.conhecendoentitymanager;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Pedido;
+import com.wandson.ecommerce.model.StatusPagamento;
 import com.wandson.ecommerce.model.StatusPedido;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,12 +15,12 @@ class FlushTest extends EntityManagerTest {
             try {
                 entityManager.getTransaction().begin();
 
-                Pedido pedido = entityManager.find(Pedido.class, 1);
+                Pedido pedido = entityManager.find(Pedido.class, 2);
                 pedido.setStatus(StatusPedido.PAGO);
 
                 entityManager.flush();
 
-                if (pedido.getPagamento() == null) {
+                if (pedido.getPagamento() == null || !pedido.getPagamento().getStatus().equals(StatusPagamento.RECEBIDO)) {
                     throw new RuntimeException("Pedido ainda não foi pago.");
                 }
 

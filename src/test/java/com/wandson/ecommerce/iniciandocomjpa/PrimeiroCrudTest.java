@@ -7,11 +7,13 @@ import com.wandson.ecommerce.model.SexoCliente;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 class PrimeiroCrudTest extends EntityManagerTest {
 
     @Test
     void inserirRegistro() {
-        Cliente cliente = new Cliente();
+        var cliente = new Cliente();
         cliente.setNome("José Lucas");
         cliente.setSexo(SexoCliente.MASCULINO);
         cliente.setCpf("333");
@@ -36,7 +38,7 @@ class PrimeiroCrudTest extends EntityManagerTest {
 
     @Test
     void atualizarRegistro() {
-        Cliente cliente = new Cliente();
+        var cliente = new Cliente();
         cliente.setId(1);
         cliente.setNome("Fernando Medeiros Silva");
         cliente.setCpf("000");
@@ -57,6 +59,13 @@ class PrimeiroCrudTest extends EntityManagerTest {
         Cliente cliente = entityManager.find(Cliente.class, 2);
 
         entityManager.getTransaction().begin();
+        if (Objects.nonNull(cliente.getPedidos()) && !cliente.getPedidos().isEmpty()) {
+            cliente.getPedidos().forEach(pedido -> {
+                pedido.getItens().forEach(entityManager::remove);
+                entityManager.remove(pedido.getPagamento());
+                entityManager.remove(pedido);
+            });
+        }
         entityManager.remove(cliente);
         entityManager.getTransaction().commit();
 

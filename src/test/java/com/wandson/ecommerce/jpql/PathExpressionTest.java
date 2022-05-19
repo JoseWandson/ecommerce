@@ -12,7 +12,7 @@ class PathExpressionTest extends EntityManagerTest {
 
     @Test
     void usarPathExpressions() {
-        String jpql = "select p.cliente.nome from Pedido p";
+        var jpql = "select p.cliente.nome from Pedido p";
 
         TypedQuery<String> typedQuery = entityManager.createQuery(jpql, String.class);
 
@@ -22,11 +22,11 @@ class PathExpressionTest extends EntityManagerTest {
 
     @Test
     void buscarPedidosComProdutoEspecifico() {
-        String jpql = "select p from Pedido p join p.itens i where i.produto.id = 1";
+        var jpql = "select p from Pedido p join p.itens i where i.produto.id = 1";
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
 
         List<Pedido> lista = typedQuery.getResultList();
-        Assertions.assertEquals(2, lista.size());
+        Assertions.assertEquals(3, lista.size());
     }
 }

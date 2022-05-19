@@ -11,12 +11,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Objects;
 
 class HerancaTest extends EntityManagerTest {
 
     @Test
     void salvarCliente() {
-        Cliente cliente = new Cliente();
+        var cliente = new Cliente();
         cliente.setNome("Fernanda Morais");
         cliente.setSexo(SexoCliente.FEMININO);
         cliente.setCpf("333");
@@ -44,12 +45,15 @@ class HerancaTest extends EntityManagerTest {
     void incluirPagamentoPedido() {
         Pedido pedido = entityManager.find(Pedido.class, 1);
 
-        PagamentoCartao pagamentoCartao = new PagamentoCartao();
+        var pagamentoCartao = new PagamentoCartao();
         pagamentoCartao.setPedido(pedido);
         pagamentoCartao.setStatus(StatusPagamento.PROCESSANDO);
         pagamentoCartao.setNumeroCartao("123");
 
         entityManager.getTransaction().begin();
+        if (Objects.nonNull(pedido.getPagamento())) {
+            entityManager.remove(pedido.getPagamento());
+        }
         entityManager.persist(pagamentoCartao);
         entityManager.getTransaction().commit();
 

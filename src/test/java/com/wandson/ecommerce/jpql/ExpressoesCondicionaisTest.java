@@ -16,7 +16,7 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
 
     @Test
     void usarExpressaoCondicionalLike() {
-        String jpql = "select c from Cliente c where c.nome like concat('%', :nome, '%')";
+        var jpql = "select c from Cliente c where c.nome like concat('%', :nome, '%')";
 
         TypedQuery<Cliente> typedQuery = entityManager.createQuery(jpql, Cliente.class);
         typedQuery.setParameter("nome", "a");
@@ -28,7 +28,7 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
     @Test
     @SuppressWarnings("JpaQlInspection")
     void usarIsNull() {
-        String jpql = "select p from Produto p where p.foto is null";
+        var jpql = "select p from Produto p where p.foto is null";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
@@ -38,17 +38,17 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
 
     @Test
     void usarIsEmpty() {
-        String jpql = "select p from Produto p where p.categorias is empty";
+        var jpql = "select p from Produto p where p.categorias is empty";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
         List<Produto> lista = typedQuery.getResultList();
-        Assertions.assertFalse(lista.isEmpty());
+        Assertions.assertTrue(lista.isEmpty());
     }
 
     @Test
     void usarMaiorMenor() {
-        String jpql = "select p from Produto p where p.preco >= :precoInicial and p.preco <= :precoFinal";
+        var jpql = "select p from Produto p where p.preco >= :precoInicial and p.preco <= :precoFinal";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
         typedQuery.setParameter("precoInicial", new BigDecimal(400));
@@ -60,10 +60,10 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
 
     @Test
     void usarMaiorMenorComDatas() {
-        String jpql = "select p from Pedido p where p.dataCriacao > :data";
+        var jpql = "select p from Pedido p where p.dataCriacao > :data";
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
-        typedQuery.setParameter("data", LocalDateTime.now().minusDays(2));
+        typedQuery.setParameter("data", LocalDateTime.now().minusDays(3));
 
         List<Pedido> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
@@ -71,7 +71,7 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
 
     @Test
     void usarBetween() {
-        String jpql = "select p from Pedido p where p.dataCriacao between :dataInicial and :dataFinal";
+        var jpql = "select p from Pedido p where p.dataCriacao between :dataInicial and :dataFinal";
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
         typedQuery.setParameter("dataInicial", LocalDateTime.now().minusDays(10));
@@ -83,11 +83,30 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
 
     @Test
     void usarExpressaoDiferente() {
-        String jpql = "select p from Produto p where p.preco <> 100";
+        var jpql = "select p from Produto p where p.preco <> 100";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
         List<Produto> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    void usarExpressaoCase() {
+        var jpql = """
+                select p.id,
+                       case type(p.pagamento)
+                           when PagamentoBoleto then 'Pago com boleto'
+                           when PagamentoCartao then 'Pago com cartão'
+                           else 'Não pago ainda.'
+                           end
+                from Pedido p""";
+
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
+
+        List<Object[]> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
     }
 }
