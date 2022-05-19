@@ -151,4 +151,24 @@ class GroupByTest extends EntityManagerTest {
 
         lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
     }
+
+    @Test
+    void condicionarAgrupamentoComHaving() {
+//         Total de vendas dentre as categorias que mais vendem.
+        var jpql = """
+                select cat.nome, sum(ip.precoProduto)
+                from ItemPedido ip
+                         join ip.produto pro
+                         join pro.categorias cat
+                group by cat.id
+                having avg(ip.precoProduto) > 1500""";
+
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
+
+        List<Object[]> lista = typedQuery.getResultList();
+
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+    }
 }
