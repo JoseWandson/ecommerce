@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 class ExpressoesCondicionaisTest extends EntityManagerTest {
@@ -108,5 +109,24 @@ class ExpressoesCondicionaisTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(arr -> System.out.println(arr[0] + ", " + arr[1]));
+    }
+
+    @Test
+    void usarExpressaoIN() {
+        var cliente1 = new Cliente(); // entityManager.find(Cliente.class, 1);
+        cliente1.setId(1);
+
+        var cliente2 = new Cliente(); // entityManager.find(Cliente.class, 2);
+        cliente2.setId(2);
+
+        List<Cliente> clientes = Arrays.asList(cliente1, cliente2);
+
+        var jpql = "select p from Pedido p where p.cliente in (:clientes)";
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
+        typedQuery.setParameter("clientes", clientes);
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
     }
 }
