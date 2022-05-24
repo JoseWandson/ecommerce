@@ -37,6 +37,18 @@ class SubqueriesTest extends EntityManagerTest {
     }
 
     @Test
+    void perquisarComSubquery_clientesCom2OuMaisPedidos() {
+        var jpql = "select c from Cliente c where (select count(cliente) from Pedido where cliente = c) >= 2";
+
+        TypedQuery<Cliente> typedQuery = entityManager.createQuery(jpql, Cliente.class);
+
+        List<Cliente> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
+    }
+
+    @Test
     void pesquisarSubqueries_todosOsPedidosAcimaDaMediaDeVendas() {
         var jpql = "select p from Pedido p where p.total > (select avg(total) from Pedido)";
 
