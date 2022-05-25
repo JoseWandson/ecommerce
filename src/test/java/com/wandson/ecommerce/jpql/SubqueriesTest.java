@@ -7,8 +7,14 @@ import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class SubqueriesTest extends EntityManagerTest {
 
@@ -111,15 +117,23 @@ class SubqueriesTest extends EntityManagerTest {
         lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
     }
 
+    @ParameterizedTest
+    @MethodSource("getJpqlsComExists")
+    void pesquisarComExists(String jpql) {
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
+    }
+
     @Test
-    void pesquisarComExists() {
+    void pesquisarComAll_todosOsProdutosQueNaoForamVendidosMaisDepoisEncareceram() {
         var jpql = """
                 select p
                 from Produto p
-                where exists(select 1
-                             from ItemPedido ip2
-                                      join ip2.produto p2
-                             where p2 = p)""";
+                where p.preco > ALL (select precoProduto from ItemPedido where produto = p)""";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
@@ -130,11 +144,11 @@ class SubqueriesTest extends EntityManagerTest {
     }
 
     @Test
-    void perquisarComExists_produtosNaoVendidosPeloPrecoAtual() {
+    void pesquisarComAll_todosOsProdutosQueSempreForamVendidosPeloPrecoAtual() {
         var jpql = """
                 select p
                 from Produto p
-                where exists(select 1 from ItemPedido where produto = p and precoProduto <> p.preco)""";
+                where p.preco = ALL (select precoProduto from ItemPedido where produto = p)""";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
@@ -142,5 +156,24 @@ class SubqueriesTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
+    }
+
+    private static Stream<Arguments> getJpqlsComExists() {
+//         Todos produtos que tenham pedidos
+        var jpql1 = """
+                select p
+                from Produto p
+                where exists(select 1
+                             from ItemPedido ip2
+                                      join ip2.produto p2
+                             where p2 = p)""";
+
+//         Produtos não vendidos pelo preço atual
+        var jpql2 = """
+                select p
+                from Produto p
+                where exists(select 1 from ItemPedido where produto = p and precoProduto <> p.preco)""";
+
+        return Stream.of(arguments(jpql1), arguments(jpql2));
     }
 }
