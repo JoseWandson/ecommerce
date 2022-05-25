@@ -128,12 +128,23 @@ class SubqueriesTest extends EntityManagerTest {
         lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
     }
 
+    @ParameterizedTest
+    @MethodSource("getJpqlsComAll")
+    void pesquisarComAll(String jpql) {
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId()));
+    }
+
     @Test
-    void pesquisarComAll_todosOsProdutosQueNaoForamVendidosMaisDepoisEncareceram() {
+    void pesquisarComAny_todosOsProdutosQueJaForamVendidosPorUmPrecoDiferenteDoAtual() {
         var jpql = """
                 select p
                 from Produto p
-                where p.preco > ALL (select precoProduto from ItemPedido where produto = p)""";
+                where p.preco <> ANY (select precoProduto from ItemPedido where produto = p)""";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
@@ -144,11 +155,11 @@ class SubqueriesTest extends EntityManagerTest {
     }
 
     @Test
-    void pesquisarComAll_todosOsProdutosQueSempreForamVendidosPeloPrecoAtual() {
+    void pesquisarComAny_todosOsProdutosQueJaForamVendidosPeloMenosUmaVezPeloPrecoAtual() {
         var jpql = """
                 select p
                 from Produto p
-                where p.preco = ALL (select precoProduto from ItemPedido where produto = p)""";
+                where p.preco = ANY (select precoProduto from ItemPedido where produto = p)""";
 
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
@@ -173,6 +184,22 @@ class SubqueriesTest extends EntityManagerTest {
                 select p
                 from Produto p
                 where exists(select 1 from ItemPedido where produto = p and precoProduto <> p.preco)""";
+
+        return Stream.of(arguments(jpql1), arguments(jpql2));
+    }
+
+    private static Stream<Arguments> getJpqlsComAll() {
+//         Todos os produtos que nao foram vendidos mas depois encareceram
+        var jpql1 = """
+                select p
+                from Produto p
+                where p.preco > ALL (select precoProduto from ItemPedido where produto = p)""";
+
+//         Todos os produtos que sempre foram vendidos pelo preco atual
+        var jpql2 = """
+                select p
+                from Produto p
+                where p.preco = ALL (select precoProduto from ItemPedido where produto = p)""";
 
         return Stream.of(arguments(jpql1), arguments(jpql2));
     }
