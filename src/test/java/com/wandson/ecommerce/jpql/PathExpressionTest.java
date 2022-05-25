@@ -27,6 +27,6 @@ class PathExpressionTest extends EntityManagerTest {
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
 
         List<Pedido> lista = typedQuery.getResultList();
-        Assertions.assertEquals(3, lista.size());
+        Assertions.assertEquals(4, lista.size());
     }
 }

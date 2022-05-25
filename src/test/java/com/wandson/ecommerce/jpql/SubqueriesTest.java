@@ -140,6 +140,19 @@ class SubqueriesTest extends EntityManagerTest {
     }
 
     @Test
+    void pesquisarComAll_todosOsProdutosQueNaoForamVendidosMasDepoisEncareceram() {
+        var jpql = """
+                select p
+                from Produto p
+                where p.preco > ALL (select precoProduto from ItemPedido where produto = p)""";
+
+        TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+
+        List<Produto> lista = typedQuery.getResultList();
+        Assertions.assertTrue(lista.isEmpty());
+    }
+
+    @Test
     void pesquisarComAny_todosOsProdutosQueJaForamVendidosPorUmPrecoDiferenteDoAtual() {
         var jpql = """
                 select p
@@ -189,17 +202,18 @@ class SubqueriesTest extends EntityManagerTest {
     }
 
     private static Stream<Arguments> getJpqlsComAll() {
-//         Todos os produtos que nao foram vendidos mas depois encareceram
+//         Todos os produtos que sempre foram vendidos pelo preco atual
         var jpql1 = """
                 select p
                 from Produto p
-                where p.preco > ALL (select precoProduto from ItemPedido where produto = p)""";
-
-//         Todos os produtos que sempre foram vendidos pelo preco atual
-        var jpql2 = """
-                select p
-                from Produto p
                 where p.preco = ALL (select precoProduto from ItemPedido where produto = p)""";
+
+//         Todos os produtos que sempre foram vendidos pelo mesmo preço.
+        var jpql2 = """
+                select distinct p
+                from ItemPedido ip
+                         join ip.produto p
+                where ip.precoProduto = ALL (select precoProduto from ItemPedido where produto = p and id <> ip.id)""";
 
         return Stream.of(arguments(jpql1), arguments(jpql2));
     }
