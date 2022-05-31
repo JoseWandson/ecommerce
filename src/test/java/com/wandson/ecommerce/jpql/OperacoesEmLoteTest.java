@@ -2,6 +2,7 @@ package com.wandson.ecommerce.jpql;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Produto;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,40 +18,60 @@ class OperacoesEmLoteTest extends EntityManagerTest {
 
     @Test
     void inserirEmLote() {
-        InputStream in = OperacoesEmLoteTest.class.getClassLoader()
-                .getResourceAsStream("produtos/importar.txt");
+        Assertions.assertDoesNotThrow(() -> {
+            try (InputStream in = OperacoesEmLoteTest.class.getClassLoader()
+                    .getResourceAsStream("produtos/importar.txt")) {
+                Assertions.assertNotNull(in);
+                try (var reader = new BufferedReader(new InputStreamReader(in))) {
+                    entityManager.getTransaction().begin();
 
-        Assertions.assertNotNull(in);
-        var reader = new BufferedReader(new InputStreamReader(in));
+                    var contadorInsercoes = 0;
 
-        entityManager.getTransaction().begin();
+                    for (String linha : reader.lines().toList()) {
+                        if (linha.isBlank()) {
+                            continue;
+                        }
 
-        var contadorInsercoes = 0;
+                        String[] produtoColuna = linha.split(";");
+                        Produto produto = new Produto();
+                        produto.setNome(produtoColuna[0]);
+                        produto.setDescricao(produtoColuna[1]);
+                        produto.setPreco(new BigDecimal(produtoColuna[2]));
+                        produto.setDataCriacao(LocalDateTime.now());
 
-        for (String linha : reader.lines().toList()) {
-            if (linha.isBlank()) {
-                continue;
+                        entityManager.persist(produto);
+
+                        if (++contadorInsercoes == LIMITE_INSERCOES) {
+                            entityManager.flush();
+                            entityManager.clear();
+
+                            contadorInsercoes = 0;
+
+                            System.out.println("---------------------------------");
+                        }
+                    }
+
+                    entityManager.getTransaction().commit();
+                }
             }
+        });
+    }
 
-            String[] produtoColuna = linha.split(";");
-            Produto produto = new Produto();
-            produto.setNome(produtoColuna[0]);
-            produto.setDescricao(produtoColuna[1]);
-            produto.setPreco(new BigDecimal(produtoColuna[2]));
-            produto.setDataCriacao(LocalDateTime.now());
+    @Test
+    void atualizarEmLote() {
+        Assertions.assertDoesNotThrow(() -> {
+            entityManager.getTransaction().begin();
 
-            entityManager.persist(produto);
+            var jpql = """
+                    update Produto p
+                    set p.preco = p.preco + (p.preco * 0.1)
+                    where exists(select 1 from p.categorias c where c.id = :categoria)""";
 
-            if (++contadorInsercoes == LIMITE_INSERCOES) {
-                entityManager.flush();
-                entityManager.clear();
+            Query query = entityManager.createQuery(jpql);
+            query.setParameter("categoria", 2);
+            query.executeUpdate();
 
-                contadorInsercoes = 0;
-
-                System.out.println("---------------------------------");
-            }
-        }
-
-        entityManager.getTransaction().commit();
+            entityManager.getTransaction().commit();
+        });
     }
 }
