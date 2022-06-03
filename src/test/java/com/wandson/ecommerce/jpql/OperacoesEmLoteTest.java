@@ -74,4 +74,18 @@ class OperacoesEmLoteTest extends EntityManagerTest {
             entityManager.getTransaction().commit();
         });
     }
+
+    @Test
+    void removerEmLote() {
+        Assertions.assertDoesNotThrow(() -> {
+            entityManager.getTransaction().begin();
+
+            var jpql = "delete from Produto p where p.id between 8 and 12";
+
+            Query query = entityManager.createQuery(jpql);
+            query.executeUpdate();
+
+            entityManager.getTransaction().commit();
+        });
+    }
 }
