@@ -58,4 +58,20 @@ class BasicoCriteriaTest extends EntityManagerTest {
         List<Produto> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
     }
+
+    @Test
+    void projetarOResultado() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
+        Root<Produto> root = criteriaQuery.from(Produto.class);
+
+        criteriaQuery.multiselect(root.get("id"), root.get("nome"));
+
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        List<Object[]> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(arr -> System.out.println("ID: " + arr[0] + ", Nome: " + arr[1]));
+    }
 }
