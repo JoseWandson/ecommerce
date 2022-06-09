@@ -3,6 +3,7 @@ package com.wandson.ecommerce.criteria;
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.Produto;
+import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -73,5 +74,21 @@ class BasicoCriteriaTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(arr -> System.out.println("ID: " + arr[0] + ", Nome: " + arr[1]));
+    }
+
+    @Test
+    void projetarOResultadoTuple() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createTupleQuery();
+        Root<Produto> root = criteriaQuery.from(Produto.class);
+
+        criteriaQuery.select(criteriaBuilder.tuple(root.get("id").alias("id"), root.get("nome").alias("nome")));
+
+        TypedQuery<Tuple> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        List<Tuple> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(t -> System.out.println("ID: " + t.get("id") + ", Nome: " + t.get("nome")));
     }
 }
