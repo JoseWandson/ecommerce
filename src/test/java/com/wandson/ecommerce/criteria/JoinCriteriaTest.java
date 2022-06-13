@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.criteria;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.model.ItemPedido;
 import com.wandson.ecommerce.model.Pagamento;
 import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.StatusPagamento;
@@ -79,5 +80,21 @@ class JoinCriteriaTest extends EntityManagerTest {
 
         Pedido pedido = typedQuery.getSingleResult();
         Assertions.assertNotNull(pedido);
+    }
+
+    @Test
+    void buscarPedidosComProdutoEspecifico() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+        Join<Pedido, ItemPedido> join = root.join("itens");
+
+        criteriaQuery.select(root);
+        criteriaQuery.where(criteriaBuilder.equal(join.get("produto").get("id"), 1));
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertEquals(4, lista.size());
     }
 }
