@@ -2,8 +2,12 @@ package com.wandson.ecommerce.criteria;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.ItemPedido;
+import com.wandson.ecommerce.model.ItemPedido_;
 import com.wandson.ecommerce.model.Pagamento;
+import com.wandson.ecommerce.model.Pagamento_;
 import com.wandson.ecommerce.model.Pedido;
+import com.wandson.ecommerce.model.Pedido_;
+import com.wandson.ecommerce.model.Produto_;
 import com.wandson.ecommerce.model.StatusPagamento;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -23,7 +27,7 @@ class JoinCriteriaTest extends EntityManagerTest {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
         Root<Pedido> root = criteriaQuery.from(Pedido.class);
-        root.join("pagamento");
+        root.join(Pedido_.pagamento);
 
         criteriaQuery.select(root);
 
@@ -38,8 +42,8 @@ class JoinCriteriaTest extends EntityManagerTest {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
         Root<Pedido> root = criteriaQuery.from(Pedido.class);
-        Join<Pedido, Pagamento> joinPagamento = root.join("pagamento");
-        joinPagamento.on(criteriaBuilder.equal(joinPagamento.get("status"), StatusPagamento.PROCESSANDO));
+        Join<Pedido, Pagamento> joinPagamento = root.join(Pedido_.pagamento);
+        joinPagamento.on(criteriaBuilder.equal(joinPagamento.get(Pagamento_.status), StatusPagamento.PROCESSANDO));
 
         criteriaQuery.select(root);
 
@@ -54,7 +58,7 @@ class JoinCriteriaTest extends EntityManagerTest {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
         Root<Pedido> root = criteriaQuery.from(Pedido.class);
-        root.join("pagamento", JoinType.LEFT);
+        root.join(Pedido_.pagamento, JoinType.LEFT);
 
         criteriaQuery.select(root);
 
@@ -69,12 +73,12 @@ class JoinCriteriaTest extends EntityManagerTest {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
         Root<Pedido> root = criteriaQuery.from(Pedido.class);
-        root.fetch("notaFiscal", JoinType.LEFT);
-        root.fetch("pagamento", JoinType.LEFT);
-        root.fetch("cliente");
+        root.fetch(Pedido_.notaFiscal, JoinType.LEFT);
+        root.fetch(Pedido_.pagamento, JoinType.LEFT);
+        root.fetch(Pedido_.cliente);
 
         criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), 1));
+        criteriaQuery.where(criteriaBuilder.equal(root.get(Pedido_.id), 1));
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
 
@@ -87,10 +91,10 @@ class JoinCriteriaTest extends EntityManagerTest {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
         Root<Pedido> root = criteriaQuery.from(Pedido.class);
-        Join<Pedido, ItemPedido> join = root.join("itens");
+        Join<Pedido, ItemPedido> join = root.join(Pedido_.itens);
 
         criteriaQuery.select(root);
-        criteriaQuery.where(criteriaBuilder.equal(join.get("produto").get("id"), 1));
+        criteriaQuery.where(criteriaBuilder.equal(join.get(ItemPedido_.produto).get(Produto_.id), 1));
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
 

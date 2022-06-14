@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -30,11 +29,9 @@ import java.util.List;
 @Setter
 @EntityListeners({GenericoListener.class})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@NamedQueries({
-        @NamedQuery(name = "Produto.listar", query = "select p from Produto p"),
-        @NamedQuery(name = "Produto.listarPorCategoria",
-                query = "select p from Produto p where " +
-                        "exists (select 1 from Categoria c2 join c2.produtos p2 where p2 = p and c2.id = :categoria)")})
+@NamedQuery(name = "Produto.listar", query = "select p from Produto p")
+@NamedQuery(name = "Produto.listarPorCategoria",
+        query = "select p from Produto p where exists (select 1 from Categoria c2 join c2.produtos p2 where p2 = p and c2.id = :categoria)")
 @Table(name = "produto", uniqueConstraints = @UniqueConstraint(name = "unq_nome", columnNames = "nome"),
         indexes = @Index(name = "idx_nome", columnList = "nome"))
 public class Produto extends EntidadeBaseInteger {

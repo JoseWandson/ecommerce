@@ -2,7 +2,9 @@ package com.wandson.ecommerce.criteria;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.NotaFiscal;
+import com.wandson.ecommerce.model.NotaFiscal_;
 import com.wandson.ecommerce.model.Pedido;
+import com.wandson.ecommerce.model.Pedido_;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -26,7 +28,7 @@ class PassandoParametroCriteriaTest extends EntityManagerTest {
 
         ParameterExpression<Integer> parameterExpressionId = criteriaBuilder.parameter(Integer.class, "id");
 
-        criteriaQuery.where(criteriaBuilder.equal(root.get("id"), parameterExpressionId));
+        criteriaQuery.where(criteriaBuilder.equal(root.get(Pedido_.id), parameterExpressionId));
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
         typedQuery.setParameter("id", 1);
@@ -46,7 +48,7 @@ class PassandoParametroCriteriaTest extends EntityManagerTest {
         ParameterExpression<LocalDateTime> parameterExpressionData = criteriaBuilder
                 .parameter(LocalDateTime.class, "dataInicial");
 
-        criteriaQuery.where(criteriaBuilder.greaterThan(root.get("dataEmissao"), parameterExpressionData));
+        criteriaQuery.where(criteriaBuilder.greaterThan(root.get(NotaFiscal_.dataEmissao), parameterExpressionData));
 
         TypedQuery<NotaFiscal> typedQuery = entityManager.createQuery(criteriaQuery);
         typedQuery.setParameter("dataInicial", LocalDateTime.now().minusDays(30));
