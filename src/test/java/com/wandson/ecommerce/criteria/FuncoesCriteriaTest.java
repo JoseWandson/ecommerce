@@ -3,9 +3,16 @@ package com.wandson.ecommerce.criteria;
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.Cliente_;
+import com.wandson.ecommerce.model.Pagamento;
+import com.wandson.ecommerce.model.PagamentoBoleto;
+import com.wandson.ecommerce.model.PagamentoBoleto_;
+import com.wandson.ecommerce.model.Pedido;
+import com.wandson.ecommerce.model.Pedido_;
+import com.wandson.ecommerce.model.StatusPedido;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -45,5 +52,37 @@ class FuncoesCriteriaTest extends EntityManagerTest {
                 + ", lower: " + arr[5]
                 + ", upper: " + arr[6]
                 + ", trim: |" + arr[7] + "|"));
+    }
+
+    @Test
+    void aplicarFuncaoData() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+        Join<Pedido, Pagamento> joinPagamento = root.join(Pedido_.pagamento);
+        Join<Pedido, PagamentoBoleto> joinPagamentoBoleto = criteriaBuilder.treat(joinPagamento, PagamentoBoleto.class);
+
+        criteriaQuery.multiselect(
+                root.get(Pedido_.id),
+                criteriaBuilder.currentDate(),
+                criteriaBuilder.currentTime(),
+                criteriaBuilder.currentTimestamp()
+        );
+        criteriaQuery.where(
+                criteriaBuilder.between(criteriaBuilder.currentDate(),
+                        root.get(Pedido_.dataCriacao).as(java.sql.Date.class),
+                        joinPagamentoBoleto.get(PagamentoBoleto_.dataVencimento).as(java.sql.Date.class)),
+                criteriaBuilder.equal(root.get(Pedido_.status), StatusPedido.AGUARDANDO)
+        );
+
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Object[]> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(arr -> System.out.println(
+                arr[0]
+                        + ", current_date: " + arr[1]
+                        + ", current_time: " + arr[2]
+                        + ", current_timestamp: " + arr[3]));
     }
 }

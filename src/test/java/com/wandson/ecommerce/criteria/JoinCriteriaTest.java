@@ -34,7 +34,7 @@ class JoinCriteriaTest extends EntityManagerTest {
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
 
         List<Pedido> lista = typedQuery.getResultList();
-        Assertions.assertEquals(4, lista.size());
+        Assertions.assertEquals(5, lista.size());
     }
 
     @Test
@@ -50,7 +50,7 @@ class JoinCriteriaTest extends EntityManagerTest {
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
 
         List<Pedido> lista = typedQuery.getResultList();
-        Assertions.assertEquals(2, lista.size());
+        Assertions.assertEquals(3, lista.size());
     }
 
     @Test
@@ -65,7 +65,7 @@ class JoinCriteriaTest extends EntityManagerTest {
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
 
         List<Pedido> lista = typedQuery.getResultList();
-        Assertions.assertEquals(5, lista.size());
+        Assertions.assertEquals(6, lista.size());
     }
 
     @Test
@@ -99,6 +99,6 @@ class JoinCriteriaTest extends EntityManagerTest {
         TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
 
         List<Pedido> lista = typedQuery.getResultList();
-        Assertions.assertEquals(4, lista.size());
+        Assertions.assertEquals(5, lista.size());
     }
 }
