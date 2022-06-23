@@ -85,4 +85,29 @@ class FuncoesCriteriaTest extends EntityManagerTest {
                         + ", current_time: " + arr[2]
                         + ", current_timestamp: " + arr[3]));
     }
+
+    @Test
+    void aplicarFuncaoNumero() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = criteriaBuilder.createQuery(Object[].class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+
+        criteriaQuery.multiselect(
+                root.get(Pedido_.id),
+                criteriaBuilder.abs(criteriaBuilder.prod(root.get(Pedido_.id), -1)),
+                criteriaBuilder.mod(root.get(Pedido_.id), 2),
+                criteriaBuilder.sqrt(root.get(Pedido_.total))
+        );
+        criteriaQuery.where(criteriaBuilder.greaterThan(criteriaBuilder.sqrt(root.get(Pedido_.total)), 10.0));
+
+        TypedQuery<Object[]> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Object[]> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(arr -> System.out.println(
+                arr[0]
+                        + ", abs: " + arr[1]
+                        + ", mod: " + arr[2]
+                        + ", sqrt: " + arr[3]));
+    }
 }
