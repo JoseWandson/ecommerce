@@ -5,6 +5,7 @@ import com.wandson.ecommerce.dto.ProdutoDTO;
 import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.Cliente_;
 import com.wandson.ecommerce.model.Pedido;
+import com.wandson.ecommerce.model.Pedido_;
 import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
@@ -125,5 +126,22 @@ class BasicoCriteriaTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(c -> System.out.println(c.getId() + ", " + c.getNome()));
+    }
+
+    @Test
+    void usarDistinct() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Pedido> criteriaQuery = criteriaBuilder.createQuery(Pedido.class);
+        Root<Pedido> root = criteriaQuery.from(Pedido.class);
+        root.join(Pedido_.itens);
+
+        criteriaQuery.select(root);
+        criteriaQuery.distinct(true);
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery(criteriaQuery);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(p -> System.out.println("ID: " + p.getId()));
     }
 }
