@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.criteria;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.model.Cliente;
 import com.wandson.ecommerce.model.Pedido;
 import com.wandson.ecommerce.model.Pedido_;
 import com.wandson.ecommerce.model.Produto;
@@ -67,5 +68,31 @@ class SubqueriesCriteriaTest extends EntityManagerTest {
 
         lista.forEach(obj -> System.out.println(
                 "ID: " + obj.getId() + ", Nome: " + obj.getNome() + ", Preço: " + obj.getPreco()));
+    }
+
+    @Test
+    void pesquisarSubqueries03() {
+//        Bons clientes.
+//        select c from Cliente c where (select sum(p.total) from Pedido p where p.cliente = c) > 1300
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Cliente> criteriaQuery = criteriaBuilder.createQuery(Cliente.class);
+        Root<Cliente> root = criteriaQuery.from(Cliente.class);
+
+        criteriaQuery.select(root);
+
+        Subquery<BigDecimal> subquery = criteriaQuery.subquery(BigDecimal.class);
+        Root<Pedido> subqueryRoot = subquery.from(Pedido.class);
+        subquery.select(criteriaBuilder.sum(subqueryRoot.get(Pedido_.total)));
+        subquery.where(criteriaBuilder.equal(root, subqueryRoot.get(Pedido_.cliente)));
+
+        criteriaQuery.where(criteriaBuilder.greaterThan(subquery, new BigDecimal(1300)));
+
+        TypedQuery<Cliente> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        List<Cliente> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.println("ID: " + obj.getId() + ", Nome: " + obj.getNome()));
     }
 }
