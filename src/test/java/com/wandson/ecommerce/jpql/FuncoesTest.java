@@ -29,7 +29,7 @@ class FuncoesTest extends EntityManagerTest {
         // current_date, current_time, current_timestamp
         // year(p.dataCriacao), month(p.dataCriacao), day(p.dataCriacao)
 
-        var jpql = "select hour(p.dataCriacao), minute(p.dataCriacao), second(p.dataCriacao) from Pedido p where hour(p.dataCriacao) > 12";
+        var jpql = "select hour(p.dataCriacao), minute(p.dataCriacao), second(p.dataCriacao) from Pedido p where hour(p.dataCriacao) > 10";
 
         TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
 

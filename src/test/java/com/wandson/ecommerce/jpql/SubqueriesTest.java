@@ -149,7 +149,7 @@ class SubqueriesTest extends EntityManagerTest {
         TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
 
         List<Produto> lista = typedQuery.getResultList();
-        Assertions.assertTrue(lista.isEmpty());
+        Assertions.assertFalse(lista.isEmpty());
     }
 
     @Test
