@@ -7,6 +7,7 @@ import com.wandson.ecommerce.model.Produto;
 import com.wandson.ecommerce.model.Produto_;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Root;
@@ -37,6 +38,25 @@ class OperacoesEmLoteCriteriaTest extends EntityManagerTest {
         criteriaUpdate.where(criteriaBuilder.exists(subquery));
 
         Query query = entityManager.createQuery(criteriaUpdate);
+        int i = query.executeUpdate();
+        Assertions.assertTrue(i > 0);
+
+        entityManager.getTransaction().commit();
+    }
+
+    @Test
+    void removerEmLote() {
+//        delete from Produto p where p.id between 5 and 12
+
+        entityManager.getTransaction().begin();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaDelete<Produto> criteriaDelete = criteriaBuilder.createCriteriaDelete(Produto.class);
+        Root<Produto> root = criteriaDelete.from(Produto.class);
+
+        criteriaDelete.where(criteriaBuilder.between(root.get(Produto_.id), 5, 12));
+
+        Query query = entityManager.createQuery(criteriaDelete);
         int i = query.executeUpdate();
         Assertions.assertTrue(i > 0);
 
