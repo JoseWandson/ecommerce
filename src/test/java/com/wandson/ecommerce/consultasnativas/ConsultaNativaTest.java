@@ -14,10 +14,10 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+@SuppressWarnings("unchecked")
 class ConsultaNativaTest extends EntityManagerTest {
 
     @Test
-    @SuppressWarnings("unchecked")
     void executarSQL() {
         String sql = "select id, nome from produto";
         Query query = entityManager.createNativeQuery(sql);
@@ -28,9 +28,30 @@ class ConsultaNativaTest extends EntityManagerTest {
         lista.forEach(arr -> System.out.printf("Produto => ID: %s, Nome: %s%n", arr[0], arr[1]));
     }
 
+    @Test
+    void passarParametros() {
+        var sql = """
+                SELECT
+                    prd_id id,
+                    prd_nome nome,
+                    prd_descricao descricao,
+                    prd_data_criacao data_criacao,
+                    prd_data_ultima_atualizacao data_ultima_atualizacao,
+                    prd_preco preco,
+                    prd_foto foto
+                FROM
+                    ecm_produto where prd_id = :id""";
+        Query query = entityManager.createNativeQuery(sql, Produto.class);
+        query.setParameter("id",201);
+
+        List<Produto> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
     @ParameterizedTest
     @MethodSource("getSqls")
-    @SuppressWarnings("unchecked")
     void executarSQLRetornandoEntidade(String sql) {
         Query query = entityManager.createNativeQuery(sql, Produto.class);
 
