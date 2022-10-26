@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.consultasnativas;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.model.ItemPedido;
 import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.Query;
 import org.junit.jupiter.api.Assertions;
@@ -42,7 +43,7 @@ class ConsultaNativaTest extends EntityManagerTest {
                 FROM
                     ecm_produto where prd_id = :id""";
         Query query = entityManager.createNativeQuery(sql, Produto.class);
-        query.setParameter("id",201);
+        query.setParameter("id", 201);
 
         List<Produto> lista = query.getResultList();
         Assertions.assertFalse(lista.isEmpty());
@@ -59,6 +60,45 @@ class ConsultaNativaTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
+    @Test
+    void usarSQLResultSetMapping01() {
+        var sql = """
+                SELECT
+                    id,
+                    nome,
+                    descricao,
+                    data_criacao,
+                    data_ultima_atualizacao,
+                    preco,
+                    foto
+                FROM
+                    produto_loja""";
+
+        Query query = entityManager.createNativeQuery(sql, "produto_loja.Produto");
+
+        List<Produto> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
+    @Test
+    void usarSQLResultSetMapping02() {
+        var sql = """
+                SELECT
+                    ip.*, p.*
+                FROM
+                    item_pedido ip join produto p on p.id = ip.produto_id""";
+
+        Query query = entityManager.createNativeQuery(sql, "item_pedido-produto.ItemPedido-Produto");
+
+        List<Object[]> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(arr -> System.out.printf("Pedido => ID: %s --- Produto => ID: %s, Nome: %s%n",
+                ((ItemPedido) arr[0]).getId().getPedidoId(), ((Produto) arr[1]).getId(), ((Produto) arr[1]).getNome()));
     }
 
     private static Stream<Arguments> getSqls() {

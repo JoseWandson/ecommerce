@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EntityResult;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -14,6 +15,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.EqualsAndHashCode;
@@ -24,16 +26,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@EntityListeners({GenericoListener.class})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@Entity
+@EntityListeners(GenericoListener.class)
 @NamedQuery(name = "Produto.listar", query = "select p from Produto p")
-@NamedQuery(name = "Produto.listarPorCategoria",
-        query = "select p from Produto p where exists (select 1 from Categoria c2 join c2.produtos p2 where p2 = p and c2.id = :categoria)")
+@SqlResultSetMapping(name = "produto_loja.Produto", entities = @EntityResult(entityClass = Produto.class))
 @Table(name = "produto", uniqueConstraints = @UniqueConstraint(name = "unq_nome", columnNames = "nome"),
         indexes = @Index(name = "idx_nome", columnList = "nome"))
+@NamedQuery(name = "Produto.listarPorCategoria",
+        query = "select p from Produto p where exists (select 1 from Categoria c2 join c2.produtos p2 where p2 = p and c2.id = :categoria)")
 public class Produto extends EntidadeBaseInteger {
 
     @Column(length = 100, nullable = false)
