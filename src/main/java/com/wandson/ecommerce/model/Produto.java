@@ -7,6 +7,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EntityResult;
+import jakarta.persistence.FieldResult;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -33,6 +34,12 @@ import java.util.List;
 @EntityListeners(GenericoListener.class)
 @NamedQuery(name = "Produto.listar", query = "select p from Produto p")
 @SqlResultSetMapping(name = "produto_loja.Produto", entities = @EntityResult(entityClass = Produto.class))
+@SqlResultSetMapping(name = "ecm_produto.Produto", entities = @EntityResult(entityClass = Produto.class, fields = {
+        @FieldResult(name = "id", column = "prd_id"), @FieldResult(name = "nome", column = "prd_nome"),
+        @FieldResult(name = "descricao", column = "prd_descricao"), @FieldResult(name = "preco", column = "prd_preco"),
+        @FieldResult(name = "foto", column = "prd_foto"),
+        @FieldResult(name = "dataCriacao", column = "prd_data_criacao"),
+        @FieldResult(name = "dataUltimaAtualizacao", column = "prd_data_ultima_atualizacao")}))
 @Table(name = "produto", uniqueConstraints = @UniqueConstraint(name = "unq_nome", columnNames = "nome"),
         indexes = @Index(name = "idx_nome", columnList = "nome"))
 @NamedQuery(name = "Produto.listarPorCategoria",

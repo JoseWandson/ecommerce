@@ -101,6 +101,22 @@ class ConsultaNativaTest extends EntityManagerTest {
                 ((ItemPedido) arr[0]).getId().getPedidoId(), ((Produto) arr[1]).getId(), ((Produto) arr[1]).getNome()));
     }
 
+    @Test
+    void usarFieldResult() {
+        var sql = """
+                SELECT
+                    *
+                FROM
+                    ecm_produto""";
+
+        Query query = entityManager.createNativeQuery(sql, "ecm_produto.Produto");
+
+        List<Produto> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
     private static Stream<Arguments> getSqls() {
 //        Produtos da tabela produto
         var sql1 = """
