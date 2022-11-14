@@ -1,8 +1,11 @@
 package com.wandson.ecommerce.model;
 
+import com.wandson.ecommerce.dto.ProdutoDTO;
 import com.wandson.ecommerce.listener.GenericoListener;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.ConstructorResult;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -33,6 +36,8 @@ import java.util.List;
 @Entity
 @EntityListeners(GenericoListener.class)
 @NamedQuery(name = "Produto.listar", query = "select p from Produto p")
+@NamedQuery(name = "Produto.listarPorCategoria",
+        query = "select p from Produto p where exists (select 1 from Categoria c2 join c2.produtos p2 where p2 = p and c2.id = :categoria)")
 @SqlResultSetMapping(name = "produto_loja.Produto", entities = @EntityResult(entityClass = Produto.class))
 @SqlResultSetMapping(name = "ecm_produto.Produto", entities = @EntityResult(entityClass = Produto.class, fields = {
         @FieldResult(name = "id", column = "prd_id"), @FieldResult(name = "nome", column = "prd_nome"),
@@ -40,10 +45,10 @@ import java.util.List;
         @FieldResult(name = "foto", column = "prd_foto"),
         @FieldResult(name = "dataCriacao", column = "prd_data_criacao"),
         @FieldResult(name = "dataUltimaAtualizacao", column = "prd_data_ultima_atualizacao")}))
+@SqlResultSetMapping(name = "ecm_produto.ProdutoDTO", classes = @ConstructorResult(targetClass = ProdutoDTO.class, columns = {
+        @ColumnResult(name = "prd_id", type = Integer.class), @ColumnResult(name = "prd_nome", type = String.class)}))
 @Table(name = "produto", uniqueConstraints = @UniqueConstraint(name = "unq_nome", columnNames = "nome"),
         indexes = @Index(name = "idx_nome", columnList = "nome"))
-@NamedQuery(name = "Produto.listarPorCategoria",
-        query = "select p from Produto p where exists (select 1 from Categoria c2 join c2.produtos p2 where p2 = p and c2.id = :categoria)")
 public class Produto extends EntidadeBaseInteger {
 
     @Column(length = 100, nullable = false)

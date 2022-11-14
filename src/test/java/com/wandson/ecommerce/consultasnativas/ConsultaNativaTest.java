@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.consultasnativas;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.dto.ProdutoDTO;
 import com.wandson.ecommerce.model.ItemPedido;
 import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.Query;
@@ -115,6 +116,22 @@ class ConsultaNativaTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
+    @Test
+    void usarColumnResultRetornarDTO() {
+        var sql = """
+                SELECT
+                    *
+                FROM
+                    ecm_produto""";
+
+        Query query = entityManager.createNativeQuery(sql, "ecm_produto.ProdutoDTO");
+
+        List<ProdutoDTO> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("ProdutoDTO => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
     }
 
     private static Stream<Arguments> getSqls() {
