@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SqlResultSetMapping;
@@ -35,6 +36,10 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @EntityListeners(GenericoListener.class)
+@NamedNativeQuery(name = "produto_loja.listar",
+        query = "select id, nome, descricao, data_criacao, data_ultima_atualizacao, preco, foto from produto_loja",
+        resultClass = Produto.class)
+@NamedNativeQuery(name = "ecm_produto.listar", query = "select * from ecm_produto", resultSetMapping = "ecm_produto.Produto")
 @NamedQuery(name = "Produto.listar", query = "select p from Produto p")
 @NamedQuery(name = "Produto.listarPorCategoria",
         query = "select p from Produto p where exists (select 1 from Categoria c2 join c2.produtos p2 where p2 = p and c2.id = :categoria)")

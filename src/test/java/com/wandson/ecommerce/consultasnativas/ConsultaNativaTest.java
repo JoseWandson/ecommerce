@@ -5,6 +5,7 @@ import com.wandson.ecommerce.dto.ProdutoDTO;
 import com.wandson.ecommerce.model.ItemPedido;
 import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,10 +17,11 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-@SuppressWarnings("unchecked")
+
 class ConsultaNativaTest extends EntityManagerTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     void executarSQL() {
         String sql = "select id, nome from produto";
         Query query = entityManager.createNativeQuery(sql);
@@ -31,6 +33,7 @@ class ConsultaNativaTest extends EntityManagerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void passarParametros() {
         var sql = """
                 SELECT
@@ -54,6 +57,7 @@ class ConsultaNativaTest extends EntityManagerTest {
 
     @ParameterizedTest
     @MethodSource("getSqls")
+    @SuppressWarnings("unchecked")
     void executarSQLRetornandoEntidade(String sql) {
         Query query = entityManager.createNativeQuery(sql, Produto.class);
 
@@ -64,6 +68,7 @@ class ConsultaNativaTest extends EntityManagerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void usarSQLResultSetMapping01() {
         var sql = """
                 SELECT
@@ -86,6 +91,7 @@ class ConsultaNativaTest extends EntityManagerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void usarSQLResultSetMapping02() {
         var sql = """
                 SELECT
@@ -103,6 +109,7 @@ class ConsultaNativaTest extends EntityManagerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void usarFieldResult() {
         var sql = """
                 SELECT
@@ -119,6 +126,7 @@ class ConsultaNativaTest extends EntityManagerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void usarColumnResultRetornarDTO() {
         var sql = """
                 SELECT
@@ -132,6 +140,26 @@ class ConsultaNativaTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(obj -> System.out.printf("ProdutoDTO => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
+    @Test
+    void usarUmaNamedNativeQuery01() {
+        TypedQuery<Produto> query = entityManager.createNamedQuery("produto_loja.listar", Produto.class);
+
+        List<Produto> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
+    @Test
+    void usarUmaNamedNativeQuery02() {
+        TypedQuery<Produto> query = entityManager.createNamedQuery("ecm_produto.listar", Produto.class);
+
+        List<Produto> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
     }
 
     private static Stream<Arguments> getSqls() {
