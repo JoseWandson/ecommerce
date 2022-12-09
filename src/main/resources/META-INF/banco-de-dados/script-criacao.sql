@@ -6,4 +6,6 @@ create table ecm_produto (prd_id integer not null auto_increment, prd_nome varch
 
 create table erp_produto (id integer not null auto_increment, nome varchar(100), descricao longtext, preco decimal(19, 2), primary key (id)) engine=InnoDB;
 
+create table ecm_categoria (cat_id integer not null auto_increment, cat_nome varchar(100), cat_categoria_pai_id integer, primary key (cat_id)) engine=InnoDB;
+
 create function acima_media_faturamento(valor double) returns boolean reads sql data return valor > (select avg(total) from pedido);

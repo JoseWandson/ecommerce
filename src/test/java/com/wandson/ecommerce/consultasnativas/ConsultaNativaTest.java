@@ -2,6 +2,7 @@ package com.wandson.ecommerce.consultasnativas;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.dto.ProdutoDTO;
+import com.wandson.ecommerce.model.Categoria;
 import com.wandson.ecommerce.model.ItemPedido;
 import com.wandson.ecommerce.model.Produto;
 import jakarta.persistence.Query;
@@ -160,6 +161,16 @@ class ConsultaNativaTest extends EntityManagerTest {
         Assertions.assertFalse(lista.isEmpty());
 
         lista.forEach(obj -> System.out.printf("Produto => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
+    @Test
+    void usarArquivoXML() {
+        TypedQuery<Categoria> query = entityManager.createNamedQuery("ecm_categoria.listar", Categoria.class);
+
+        List<Categoria> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("Categoria => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
     }
 
     private static Stream<Arguments> getSqls() {
