@@ -9,12 +9,23 @@
         <query>select * from ecm_categoria</query>
     </named-native-query>
 
+    <named-native-query name="ecm_categoria.listar.dto" result-set-mapping="ecm_categoria.CategoriaDTO">
+        <query>select cat_id, cat_nome from ecm_categoria</query>
+    </named-native-query>
+
     <sql-result-set-mapping name="ecm_categoria.Categoria">
         <entity-result entity-class="com.wandson.ecommerce.model.Categoria">
             <field-result name="id" column="cat_id"/>
             <field-result name="nome" column="cat_nome"/>
             <field-result name="categoriaPai" column="cat_categoria_pai_id"/>
         </entity-result>
+    </sql-result-set-mapping>
+
+    <sql-result-set-mapping name="ecm_categoria.CategoriaDTO">
+        <constructor-result target-class="com.wandson.ecommerce.dto.CategoriaDTO">
+            <column name="cat_id"/>
+            <column name="cat_nome"/>
+        </constructor-result>
     </sql-result-set-mapping>
 
 </entity-mappings>

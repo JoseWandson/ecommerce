@@ -1,6 +1,7 @@
 package com.wandson.ecommerce.consultasnativas;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.dto.CategoriaDTO;
 import com.wandson.ecommerce.dto.ProdutoDTO;
 import com.wandson.ecommerce.model.Categoria;
 import com.wandson.ecommerce.model.ItemPedido;
@@ -172,6 +173,17 @@ class ConsultaNativaTest extends EntityManagerTest {
 
         lista.forEach(obj -> System.out.printf("Categoria => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
     }
+
+    @Test
+    void mapearConsultaParaDTOEmArquivoExterno() {
+        TypedQuery<CategoriaDTO> query = entityManager.createNamedQuery("ecm_categoria.listar.dto", CategoriaDTO.class);
+
+        List<CategoriaDTO> lista = query.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+
+        lista.forEach(obj -> System.out.printf("CategoriaDTO => ID: %s, Nome: %s%n", obj.getId(), obj.getNome()));
+    }
+
 
     private static Stream<Arguments> getSqls() {
 //        Produtos da tabela produto
