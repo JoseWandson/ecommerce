@@ -1,10 +1,13 @@
 package com.wandson.ecommerce.consultasnativas;
 
 import com.wandson.ecommerce.EntityManagerTest;
+import com.wandson.ecommerce.model.Cliente;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class StoredProceduresTest extends EntityManagerTest {
 
@@ -18,5 +21,18 @@ class StoredProceduresTest extends EntityManagerTest {
         String nome = (String) storedProcedureQuery.getOutputParameterValue("produto_nome");
 
         Assertions.assertEquals("Kindle", nome);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void receberListaDaProcedure() {
+        StoredProcedureQuery storedProcedureQuery = entityManager
+                .createStoredProcedureQuery("compraram_acima_media", Cliente.class);
+        storedProcedureQuery.registerStoredProcedureParameter("ano", Integer.class, ParameterMode.IN);
+        storedProcedureQuery.setParameter("ano", 2023);
+
+        List<Cliente> lista = storedProcedureQuery.getResultList();
+
+        Assertions.assertFalse(lista.isEmpty());
     }
 }
