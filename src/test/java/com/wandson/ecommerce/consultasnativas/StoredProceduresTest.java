@@ -51,4 +51,15 @@ class StoredProceduresTest extends EntityManagerTest {
 
         Assertions.assertEquals(new BigDecimal("878.9"), precoAjustado);
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void chamarNamedStoredProcedure() {
+        StoredProcedureQuery storedProcedureQuery = entityManager.createNamedStoredProcedureQuery("compraram_acima_media");
+        storedProcedureQuery.setParameter("ano", 2023);
+
+        List<Cliente> lista = storedProcedureQuery.getResultList();
+
+        Assertions.assertFalse(lista.isEmpty());
+    }
 }
