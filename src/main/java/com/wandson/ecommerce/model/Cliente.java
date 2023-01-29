@@ -19,6 +19,7 @@ import jakarta.persistence.StoredProcedureParameter;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,9 +39,11 @@ import java.util.Objects;
         resultClasses = Cliente.class)
 public class Cliente extends EntidadeBaseInteger {
 
+    @NotBlank
     @Column(length = 100, nullable = false)
     private String nome;
 
+    @NotBlank
     @Column(length = 14, nullable = false)
     private String cpf;
 
