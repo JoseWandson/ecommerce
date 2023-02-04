@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +26,12 @@ import lombok.Setter;
 public abstract class Pagamento extends EntidadeBaseInteger {
 
     @MapsId
+    @NotNull
     @OneToOne(optional = false)
     @JoinColumn(name = "pedido_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pagamento_pedido"))
     private Pedido pedido;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(length = 30, nullable = false)
     private StatusPagamento status;

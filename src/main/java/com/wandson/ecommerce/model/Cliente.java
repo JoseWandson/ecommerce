@@ -20,9 +20,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,16 +46,19 @@ public class Cliente extends EntidadeBaseInteger {
     @Column(length = 100, nullable = false)
     private String nome;
 
-    @NotBlank
+    @CPF
+    @NotNull
     @Column(length = 14, nullable = false)
     private String cpf;
 
     @Transient
     private String primeiroNome;
 
+    @Past
     @Column(table = "cliente_detalhe", name = "data_nascimento")
     private LocalDate dataNascimento;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(table = "cliente_detalhe", length = 30, nullable = false)
     private SexoCliente sexo;

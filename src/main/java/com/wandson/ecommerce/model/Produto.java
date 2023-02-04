@@ -23,6 +23,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,17 +60,22 @@ import java.util.List;
         indexes = @Index(name = "idx_nome", columnList = "nome"))
 public class Produto extends EntidadeBaseInteger {
 
+    @NotBlank
     @Column(length = 100, nullable = false)
     private String nome;
 
     @Lob
     private String descricao;
 
+    @Positive
     private BigDecimal preco;
 
+    @NotNull
+    @PastOrPresent
     @Column(name = "data_criacao", updatable = false, nullable = false)
     private LocalDateTime dataCriacao;
 
+    @PastOrPresent
     @Column(name = "data_ultima_atualizacao", insertable = false)
     private LocalDateTime dataUltimaAtualizacao;
 
