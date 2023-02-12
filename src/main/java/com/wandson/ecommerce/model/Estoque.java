@@ -1,5 +1,6 @@
 package com.wandson.ecommerce.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
@@ -25,5 +26,6 @@ public class Estoque extends EntidadeBaseInteger {
 
     @NotNull
     @PositiveOrZero
+    @Column(nullable = false)
     private Integer quantidade;
 }
