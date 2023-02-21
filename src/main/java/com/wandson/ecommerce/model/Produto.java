@@ -2,10 +2,12 @@ package com.wandson.ecommerce.model;
 
 import com.wandson.ecommerce.dto.ProdutoDTO;
 import com.wandson.ecommerce.listener.GenericoListener;
+import com.wandson.ecommerce.model.converter.BooleanToSimNaoConverter;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ColumnResult;
 import jakarta.persistence.ConstructorResult;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -82,6 +84,11 @@ public class Produto extends EntidadeBaseInteger {
     @Lob
     private byte[] foto;
 
+    @NotNull
+    @Column(length = 3, nullable = false)
+    @Convert(converter = BooleanToSimNaoConverter.class)
+    private Boolean ativo;
+
     @OneToOne(mappedBy = "produto")
     private Estoque estoque;
 
@@ -105,4 +112,8 @@ public class Produto extends EntidadeBaseInteger {
             joinColumns = @JoinColumn(name = "produto_id", nullable = false,
                     foreignKey = @ForeignKey(name = "fk_produto_atributo_produto")))
     private List<Atributo> atributos;
+
+    public Produto() {
+        ativo = Boolean.FALSE;
+    }
 }
