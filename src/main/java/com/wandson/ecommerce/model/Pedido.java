@@ -52,7 +52,7 @@ import java.util.Objects;
 public class Pedido extends EntidadeBaseInteger implements PersistentAttributeInterceptable {
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false, foreignKey = @ForeignKey(name = "fk_pedido_cliente"))
     private Cliente cliente;
 
