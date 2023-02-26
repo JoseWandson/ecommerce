@@ -2,7 +2,9 @@ package com.wandson.ecommerce.detalhesimportantes;
 
 import com.wandson.ecommerce.EntityManagerTest;
 import com.wandson.ecommerce.model.Cliente;
+import com.wandson.ecommerce.model.Cliente_;
 import com.wandson.ecommerce.model.Pedido;
+import com.wandson.ecommerce.model.Pedido_;
 import jakarta.persistence.EntityGraph;
 import jakarta.persistence.Subgraph;
 import jakarta.persistence.TypedQuery;
@@ -13,12 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 class EntityGraphTest extends EntityManagerTest {
 
     @Test
     void buscarAtributosEssenciaisDePedidoComFind() {
         EntityGraph<Pedido> entityGraph = entityManager.createEntityGraph(Pedido.class);
-        entityGraph.addAttributeNodes("notaFiscal", "cliente");
+        entityGraph.addAttributeNodes(Pedido_.notaFiscal, Pedido_.cliente);
 
         Map<String, Object> properties = new HashMap<>();
 //        properties.put("jakarta.persistence.fetchgraph", entityGraph);
@@ -30,7 +33,7 @@ class EntityGraphTest extends EntityManagerTest {
     @Test
     void buscarAtributosEssenciaisDePedidoComJPQL() {
         EntityGraph<Pedido> entityGraph = entityManager.createEntityGraph(Pedido.class);
-        entityGraph.addAttributeNodes("notaFiscal", "cliente");
+        entityGraph.addAttributeNodes(Pedido_.notaFiscal, Pedido_.cliente);
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery("select p from Pedido p", Pedido.class);
         typedQuery.setHint("jakarta.persistence.fetchgraph", entityGraph);
@@ -41,10 +44,10 @@ class EntityGraphTest extends EntityManagerTest {
     @Test
     void buscarAtributosEssenciaisDePedidoComJPQL02() {
         EntityGraph<Pedido> entityGraph = entityManager.createEntityGraph(Pedido.class);
-        entityGraph.addAttributeNodes("dataCriacao", "status", "total");
+        entityGraph.addAttributeNodes(Pedido_.dataCriacao, Pedido_.status, Pedido_.total);
 
-        Subgraph<Cliente> subgraphCliente = entityGraph.addSubgraph("cliente", Cliente.class);
-        subgraphCliente.addAttributeNodes("nome", "cpf");
+        Subgraph<Cliente> subgraphCliente = entityGraph.addSubgraph(Pedido_.cliente);
+        subgraphCliente.addAttributeNodes(Cliente_.nome, Cliente_.cpf);
 
         TypedQuery<Pedido> typedQuery = entityManager.createQuery("select p from Pedido p", Pedido.class);
         typedQuery.setHint("jakarta.persistence.fetchgraph", entityGraph);
