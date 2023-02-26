@@ -54,4 +54,15 @@ class EntityGraphTest extends EntityManagerTest {
         List<Pedido> lista = typedQuery.getResultList();
         Assertions.assertFalse(lista.isEmpty());
     }
+
+    @Test
+    void buscarAtributosEssenciaisComNamedEntityGraph() {
+        EntityGraph<?> entityGraph = entityManager.createEntityGraph("Pedido.dadosEssenciais");
+        entityGraph.addAttributeNodes("pagamento");
+
+        TypedQuery<Pedido> typedQuery = entityManager.createQuery("select p from Pedido p", Pedido.class);
+        typedQuery.setHint("jakarta.persistence.fetchgraph", entityGraph);
+        List<Pedido> lista = typedQuery.getResultList();
+        Assertions.assertFalse(lista.isEmpty());
+    }
 }

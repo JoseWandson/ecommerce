@@ -12,6 +12,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PostLoad;
@@ -49,6 +52,27 @@ import java.util.Objects;
 @Table(name = "pedido")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @EntityListeners({GerarNotaFiscalListener.class, GenericoListener.class})
+@NamedEntityGraph(
+        name = "Pedido.dadosEssenciais",
+        attributeNodes = {
+                @NamedAttributeNode("dataCriacao"),
+                @NamedAttributeNode("status"),
+                @NamedAttributeNode("total"),
+                @NamedAttributeNode(
+                        value = "cliente",
+                        subgraph = "cli"
+                )
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "cli",
+                        attributeNodes = {
+                                @NamedAttributeNode("nome"),
+                                @NamedAttributeNode("cpf")
+                        }
+                )
+        }
+)
 public class Pedido extends EntidadeBaseInteger implements PersistentAttributeInterceptable {
 
     @NotNull
@@ -117,6 +141,7 @@ public class Pedido extends EntidadeBaseInteger implements PersistentAttributeIn
         return notaFiscal;
     }
 
+    @SuppressWarnings("unused")
     public void setNotaFiscal(NotaFiscal notaFiscal) {
         if (Objects.nonNull(persistentAttributeInterceptor)) {
             this.notaFiscal = (NotaFiscal) persistentAttributeInterceptor.writeObject(this, "notaFiscal", this.notaFiscal, notaFiscal);
