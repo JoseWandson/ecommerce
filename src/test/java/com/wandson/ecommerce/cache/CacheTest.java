@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -19,14 +20,30 @@ public class CacheTest {
 
     @Test
     void buscarDoCache() {
-        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
-        EntityManager entityManager2 = entityManagerFactory.createEntityManager();
+        Assertions.assertDoesNotThrow(() -> {
+            EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+            EntityManager entityManager2 = entityManagerFactory.createEntityManager();
 
-        System.out.println("Buscando a partir da instância 1:");
-        entityManager1.find(Pedido.class, 1);
+            System.out.println("Buscando a partir da instância 1:");
+            entityManager1.find(Pedido.class, 1);
 
-        System.out.println("Buscando a partir da instância 2:");
-        entityManager2.find(Pedido.class, 1);
+            System.out.println("Buscando a partir da instância 2:");
+            entityManager2.find(Pedido.class, 1);
+        });
+    }
+
+    @Test
+    void adicionarPedidosNoCache() {
+        Assertions.assertDoesNotThrow(() -> {
+            EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+            EntityManager entityManager2 = entityManagerFactory.createEntityManager();
+
+            System.out.println("Buscando a partir da instância 1:");
+            entityManager1.createQuery("select p from Pedido p", Pedido.class).getResultList();
+
+            System.out.println("Buscando a partir da instância 2:");
+            entityManager2.find(Pedido.class, 1);
+        });
     }
 
     @AfterAll
