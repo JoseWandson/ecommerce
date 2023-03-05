@@ -67,6 +67,19 @@ public class CacheTest {
         });
     }
 
+    @Test
+    void verificarSeEstaNoCache() {
+        Cache cache = entityManagerFactory.getCache();
+
+        EntityManager entityManager1 = entityManagerFactory.createEntityManager();
+
+        System.out.println("Buscando a partir da instância 1:");
+        entityManager1.createQuery("select p from Pedido p", Pedido.class).getResultList();
+
+        Assertions.assertTrue(cache.contains(Pedido.class, 1));
+        Assertions.assertTrue(cache.contains(Pedido.class, 2));
+    }
+
 
     @AfterAll
     public static void tearDownAfterClass() {
