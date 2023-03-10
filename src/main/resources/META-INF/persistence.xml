@@ -8,6 +8,8 @@
         <mapping-file>META-INF/consultas/produto.xml</mapping-file>
         <mapping-file>META-INF/consultas/categoria.xml</mapping-file>
 
+        <shared-cache-mode>ALL</shared-cache-mode>
+
         <validation-mode>CALLBACK</validation-mode>
 
         <properties>
@@ -20,8 +22,6 @@
             <property name="hibernate.hikari.maximumPoolSize" value="12"/>
             <property name="hibernate.connection.provider_class"
                       value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
-
-            <property name="jakarta.persistence.sharedCache.mode" value="ALL"/>
 
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
 
