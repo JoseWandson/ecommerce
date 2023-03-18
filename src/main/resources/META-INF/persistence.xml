@@ -23,6 +23,11 @@
             <property name="hibernate.connection.provider_class"
                       value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
 
+            <property name="hibernate.cache.region.factory_class"
+                      value="org.hibernate.cache.jcache.internal.JCacheRegionFactory"/>
+            <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
+            <property name="hibernate.javax.cache.uri" value="META-INF/ehcache.xml"/>
+
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
 
             <property name="jakarta.persistence.schema-generation.create-source" value="metadata-then-script"/>
@@ -35,7 +40,7 @@
             <property name="jakarta.persistence.sql-load-script-source"
                       value="META-INF/banco-de-dados/dados-iniciais.sql"/>
 
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
