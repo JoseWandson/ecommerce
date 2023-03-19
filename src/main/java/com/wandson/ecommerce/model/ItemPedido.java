@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.EqualsAndHashCode;
@@ -29,6 +30,9 @@ public class ItemPedido {
 
     @EmbeddedId
     private ItemPedidoId id;
+
+    @Version
+    private Integer versao;
 
     @NotNull
     @MapsId("pedidoId")
