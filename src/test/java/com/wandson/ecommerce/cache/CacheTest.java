@@ -1,28 +1,18 @@
 package com.wandson.ecommerce.cache;
 
+import com.wandson.ecommerce.EntityManagerFactoryTest;
 import com.wandson.ecommerce.model.Pedido;
 import jakarta.persistence.Cache;
 import jakarta.persistence.CacheRetrieveMode;
 import jakarta.persistence.CacheStoreMode;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CacheTest {
-
-    private static EntityManagerFactory entityManagerFactory;
-
-    @BeforeAll
-    public static void setUpBeforeClass() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("Ecommerce-PU");
-    }
+class CacheTest extends EntityManagerFactoryTest {
 
     @Test
     void buscarDoCache() {
@@ -163,21 +153,5 @@ public class CacheTest {
 
         entityManager1.close();
         entityManager2.close();
-    }
-
-    @AfterAll
-    public static void tearDownAfterClass() {
-        entityManagerFactory.close();
-    }
-
-    private static void log(Object obj) {
-        System.out.println("[LOG " + System.currentTimeMillis() + "] " + obj);
-    }
-
-    private static void esperar(int segundos) {
-        try {
-            Thread.sleep(segundos * 1000L);
-        } catch (InterruptedException ignored) {
-        }
     }
 }

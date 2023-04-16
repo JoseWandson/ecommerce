@@ -1,22 +1,12 @@
 package com.wandson.ecommerce.concorrencia;
 
+import com.wandson.ecommerce.EntityManagerFactoryTest;
 import com.wandson.ecommerce.model.Produto;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.LockModeType;
-import jakarta.persistence.Persistence;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class LockPessimistaTest {
-
-    private static EntityManagerFactory entityManagerFactory;
-
-    @BeforeAll
-    public static void setUpBeforeAll() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("Ecommerce-PU");
-    }
+class LockPessimistaTest extends EntityManagerFactoryTest {
 
     @Test
     void usarLockPessimistaLockModeTypePessimisticRead() {
@@ -321,21 +311,5 @@ public class LockPessimistaTest {
         Assertions.assertTrue(produto.getDescricao().startsWith("Descrição massa!"));
 
         log("Encerrando método de teste.");
-    }
-
-    @AfterAll
-    public static void tearDownAfterAll() {
-        entityManagerFactory.close();
-    }
-
-    private static void log(Object obj, Object... args) {
-        System.out.printf("[LOG " + System.currentTimeMillis() + "] " + obj + "%n", args);
-    }
-
-    private static void esperar(int segundos) {
-        try {
-            Thread.sleep(segundos * 1000L);
-        } catch (InterruptedException ignored) {
-        }
     }
 }
