@@ -19,15 +19,6 @@
             <property name="jakarta.persistence.jdbc.password" value="flamengo"/>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
-            <property name="hibernate.hikari.maximumPoolSize" value="12"/>
-            <property name="hibernate.connection.provider_class"
-                      value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
-
-            <property name="hibernate.cache.region.factory_class"
-                      value="org.hibernate.cache.jcache.internal.JCacheRegionFactory"/>
-            <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
-            <property name="hibernate.javax.cache.uri" value="META-INF/ehcache.xml"/>
-
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
 
             <property name="jakarta.persistence.schema-generation.create-source" value="metadata-then-script"/>
@@ -40,10 +31,32 @@
             <property name="jakarta.persistence.sql-load-script-source"
                       value="META-INF/banco-de-dados/dados-iniciais.sql"/>
 
+            <property name="jakarta.persistence.schema-generation.scripts.action"
+                      value="none"/>
+            <property name="jakarta.persistence.schema-generation.scripts.create-target"
+                      value="C:/tmp/sql/script-criacao-exportado.sql"/>
+            <property name="jakarta.persistence.schema-generation.scripts.drop-target"
+                      value="C:/tmp/sql/script-remocao-exportado.sql"/>
+
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
 
+            <property name="hibernate.multiTenancy" value="SCHEMA"/>
+            <property name="hibernate.tenant_identifier_resolver"
+                      value="com.wandson.ecommerce.hibernate.EcmCurrentTenantIdentifierResolver"/>
+            <property name="hibernate.multi_tenant_connection_provider"
+                      value="com.wandson.ecommerce.hibernate.EcmSchemaMultiTenantConnectionProvider"/>
+
+            <property name="hibernate.hikari.maximumPoolSize" value="12"/>
+            <property name="hibernate.connection.provider_class"
+                      value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
+
+            <property name="hibernate.cache.region.factory_class"
+                      value="org.hibernate.cache.jcache.internal.JCacheRegionFactory"/>
+            <property name="hibernate.javax.cache.provider" value="org.ehcache.jsr107.EhcacheCachingProvider"/>
+            <property name="hibernate.javax.cache.uri" value="META-INF/ehcache.xml"/>
+
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.format_sql" value="false"/>
         </properties>
     </persistence-unit>
 </persistence>
