@@ -25,4 +25,21 @@ class MultiTenantTest extends EntityManagerFactoryTest {
             EcmCurrentTenantIdentifierResolver.unload();
         }
     }
+
+    @Test
+    void usarAbordagemPorMaquina() {
+        EcmCurrentTenantIdentifierResolver.setTenantIdentifier("ecommerce");
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Produto produto = entityManager.find(Produto.class, 1);
+            Assertions.assertEquals("Kindle", produto.getNome());
+            EcmCurrentTenantIdentifierResolver.unload();
+        }
+
+        EcmCurrentTenantIdentifierResolver.setTenantIdentifier("loja_ecommerce");
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Produto produto = entityManager.find(Produto.class, 1);
+            Assertions.assertEquals("Kindle Paperwhite", produto.getNome());
+            EcmCurrentTenantIdentifierResolver.unload();
+        }
+    }
 }
