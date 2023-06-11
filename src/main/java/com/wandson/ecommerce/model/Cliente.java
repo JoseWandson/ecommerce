@@ -37,7 +37,7 @@ import java.util.Objects;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @SecondaryTable(name = "cliente_detalhe", pkJoinColumns = @PrimaryKeyJoinColumn(name = "cliente_id"), foreignKey = @ForeignKey(name = "fk_cliente_detalhe_cliente"))
-@Table(name = "cliente", uniqueConstraints = @UniqueConstraint(name = "unq_cpf", columnNames = "cpf"), indexes = @Index(name = "idx_nome", columnList = "nome"))
+@Table(name = "cliente", uniqueConstraints = @UniqueConstraint(name = "unq_cliente_ncpf", columnNames = "cpf"), indexes = @Index(name = "idx_cliente_nome", columnList = "nome"))
 @NamedStoredProcedureQuery(name = "compraram_acima_media", procedureName = "compraram_acima_media", parameters = @StoredProcedureParameter(name = "ano", type = Integer.class),
         resultClasses = Cliente.class)
 public class Cliente extends EntidadeBaseInteger {

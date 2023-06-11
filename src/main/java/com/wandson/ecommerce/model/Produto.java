@@ -58,15 +58,14 @@ import java.util.List;
         @FieldResult(name = "dataUltimaAtualizacao", column = "prd_data_ultima_atualizacao")}))
 @SqlResultSetMapping(name = "ecm_produto.ProdutoDTO", classes = @ConstructorResult(targetClass = ProdutoDTO.class, columns = {
         @ColumnResult(name = "prd_id", type = Integer.class), @ColumnResult(name = "prd_nome", type = String.class)}))
-@Table(name = "produto", uniqueConstraints = @UniqueConstraint(name = "unq_nome", columnNames = "nome"),
-        indexes = @Index(name = "idx_nome", columnList = "nome"))
+@Table(name = "produto", uniqueConstraints = @UniqueConstraint(name = "unq_produto_nome", columnNames = "nome"),
+        indexes = @Index(name = "idx_produto_nome", columnList = "nome"))
 public class Produto extends EntidadeBaseInteger {
 
     @NotBlank
     @Column(length = 100, nullable = false)
     private String nome;
 
-    @Lob
     private String descricao;
 
     @Positive

@@ -12,7 +12,7 @@ public class ExecutarDDL {
         Map<String, String> propriedades = new HashMap<>();
 
         propriedades.put("jakarta.persistence.jdbc.url",
-                "jdbc:mysql://localhost/loja_ecommerce?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC");
+                "jdbc:postgresql://localhost/ecommerce");
 
         propriedades.put("jakarta.persistence.schema-generation.database.action",
                 "drop-and-create");
