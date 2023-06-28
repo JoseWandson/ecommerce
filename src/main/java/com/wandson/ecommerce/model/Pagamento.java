@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,8 +24,15 @@ import lombok.Setter;
 @Inheritance
 @Table(name = "pagamento")
 @DiscriminatorColumn(name = "tipo_pagamento")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public abstract class Pagamento extends EntidadeBaseInteger {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public abstract class Pagamento {
+
+    @Id
+    @EqualsAndHashCode.Include
+    private Integer id;
+
+    @Version
+    private Integer versao;
 
     @MapsId
     @NotNull

@@ -53,7 +53,7 @@ class BasicoJPQLTest extends EntityManagerTest {
 
     @Test
     void projetarOResultado() {
-        String jpql = "select id, nome from Produto";
+        String jpql = "select p.id, p.nome from Produto p";
 
         TypedQuery<Object[]> typedQuery = entityManager.createQuery(jpql, Object[].class);
         List<Object[]> lista = typedQuery.getResultList();
@@ -65,7 +65,7 @@ class BasicoJPQLTest extends EntityManagerTest {
 
     @Test
     void projetarNoDTO() {
-        String jpql = "select new com.wandson.ecommerce.dto.ProdutoDTO(id, nome) from Produto";
+        String jpql = "select new com.wandson.ecommerce.dto.ProdutoDTO(p.id, p.nome) from Produto p";
 
         TypedQuery<ProdutoDTO> typedQuery = entityManager.createQuery(jpql, ProdutoDTO.class);
         List<ProdutoDTO> lista = typedQuery.getResultList();
